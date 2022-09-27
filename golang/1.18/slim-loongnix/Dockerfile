@@ -10,7 +10,6 @@ FROM loongnix:20-slim
 RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
-        ca-certificates \
 		g++ \
 		gcc \
 		libc6-dev \
@@ -73,6 +72,8 @@ RUN set -eux; \
 		apt-mark auto '.*' > /dev/null; \
 		apt-mark manual $savedAptMark > /dev/null; \
 		apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
+		apt-get install -y --no-install-recommends ca-certificates git; \
+		apt-get clean all; \
 		rm -rf /var/lib/apt/lists/*; \
 		\
 # remove a few intermediate / bootstrapping files the official binary release tarballs do not contain
