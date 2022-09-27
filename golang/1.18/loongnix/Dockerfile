@@ -4,13 +4,12 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM loongnix:20-slim
+FROM cr.loongnix.cn/loongson/loongnix:20
 
 # install cgo-related dependencies
 RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
-        ca-certificates \
 		g++ \
 		gcc \
 		libc6-dev \
