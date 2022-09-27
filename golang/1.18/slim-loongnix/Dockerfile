@@ -4,7 +4,7 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM loongnix:20-slim
+FROM cr.loongnix.cn/loongson/loongnix:20
 
 # install cgo-related dependencies
 RUN set -eux; \
