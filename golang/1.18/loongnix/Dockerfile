@@ -10,8 +10,10 @@ FROM cr.loongnix.cn/loongson/loongnix:20
 RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
+        ca-certificates \
 		g++ \
 		gcc \
+		git \
 		libc6-dev \
 		make \
 		pkg-config \
@@ -72,7 +74,6 @@ RUN set -eux; \
 		apt-mark auto '.*' > /dev/null; \
 		apt-mark manual $savedAptMark > /dev/null; \
 		apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
-		apt-get install -y --no-install-recommends ca-certificates git; \
 		apt-get clean all; \
 		rm -rf /var/lib/apt/lists/*; \
 		\
