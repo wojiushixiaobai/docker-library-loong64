@@ -79,7 +79,7 @@ RUN ${PREFIX_DIR}/bin/list-dependencies.sh     \
         ${PREFIX_DIR}/lib/freerdp2/*guac*.so   \
         > ${PREFIX_DIR}/DEPENDENCIES
 
-FROM cr.loongnix.cn/loongson/loongnix:20-slim
+FROM loongnix:20-slim
 
 ARG PREFIX_DIR=/usr/local/guacamole
 
