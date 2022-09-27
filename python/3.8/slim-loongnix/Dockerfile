@@ -4,7 +4,7 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM cr.loongnix.cn/loongson/loongnix:20-slim
+FROM loongnix:20-slim
 
 # ensure local python is preferred over distribution python
 ENV PATH /usr/local/bin:$PATH

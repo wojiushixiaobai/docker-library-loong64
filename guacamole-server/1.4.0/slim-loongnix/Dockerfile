@@ -1,4 +1,4 @@
-FROM cr.loongnix.cn/loongson/loongnix:20-slim as builder
+FROM loongnix:20-slim as builder
 WORKDIR /opt
 ARG GUACD_VERSION=1.4.0
 ENV LC_ALL=C.UTF-8
