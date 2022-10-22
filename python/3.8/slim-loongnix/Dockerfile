@@ -21,6 +21,7 @@ RUN set -eux; \
 		netbase \
 		tzdata \
 	; \
+	apt-get clean all; \
 	rm -rf /var/lib/apt/lists/*
 
 ENV GPG_KEY E3FF2839C048B25C084DEBE9B26995E310250568
@@ -160,6 +161,7 @@ RUN set -eux; \
         ; \
         dpkg -l | grep "^rc" | awk '{print $2}' | xargs apt-get purge -y; \
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
+	apt-get clean all; \
 	rm -rf /var/lib/apt/lists/*; \
 	\
 	python3 --version

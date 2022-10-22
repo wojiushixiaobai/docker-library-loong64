@@ -39,6 +39,7 @@ RUN set -ex \
     && apt-get install -y --no-install-recommends $BUILD_DEPENDENCIES \
     && apt-get install -y --no-install-recommends $TOOLS \
     && echo "no" | dpkg-reconfigure dash \
+    && apt-get clean all \
     && rm -rf /var/lib/apt/lists/*
 
 RUN set -ex \
@@ -78,6 +79,7 @@ ARG RUNTIME_DEPENDENCIES="            \
         ghostscript                   \
         fonts-liberation              \
         fonts-dejavu                  \
+        freerdp2-dev                  \
         wget                          \
         xfonts-terminus"
 
@@ -88,13 +90,8 @@ RUN set -ex \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && apt-get update \
     && apt-get install -y $RUNTIME_DEPENDENCIES \
-    && echo "no" | dpkg-reconfigure dash \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN set -ex \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends freerdp2-dev \
     && apt-get install -y --no-install-recommends $(cat "${PREFIX_DIR}"/DEPENDENCIES) \
+    && echo "no" | dpkg-reconfigure dash \
     && apt-get clean all \
     && rm -rf /var/lib/apt/lists/*
 

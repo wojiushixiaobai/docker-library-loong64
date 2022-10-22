@@ -25,6 +25,7 @@ RUN set -eux; \
 	apt-mark auto '.*' > /dev/null; \
 	[ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; \
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
+	apt-get clean all; \
 	chmod +x /usr/local/bin/gosu; \
 	gosu --version; \
 	gosu nobody true
@@ -45,6 +46,7 @@ RUN set -ex; \
 		xz-utils \
 		zstd \
 	; \
+	apt-get clean all; \
 	rm -rf /var/lib/apt/lists/*
 
 # bashbrew-architectures: amd64 arm64v8 ppc64le s390x
@@ -76,6 +78,7 @@ RUN set -ex; \
 	apt-get install -y \
 		"mariadb-server=$MARIADB_VERSION" mariadb-backup socat \
 	; \
+	apt-get clean all; \
 	rm -rf /var/lib/apt/lists/*; \
 # purge and re-create /var/lib/mysql with appropriate ownership
 	rm -rf /var/lib/mysql; \

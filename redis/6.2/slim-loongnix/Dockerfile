@@ -39,6 +39,7 @@ RUN set -eux; \
         pkg-config \
 		make \
 	; \
+	apt-get clean all; \
 	rm -rf /var/lib/apt/lists/*; \
 	\
 	wget -O redis.tar.gz "$REDIS_DOWNLOAD_URL"; \
