@@ -75,12 +75,10 @@ ENV GUACD_LOG_LEVEL=info
 ARG RUNTIME_DEPENDENCIES="            \
         netcat-openbsd                \
         ca-certificates               \
-        curl                          \
         ghostscript                   \
         fonts-liberation              \
         fonts-dejavu                  \
         freerdp2-dev                  \
-        wget                          \
         xfonts-terminus"
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -89,7 +87,7 @@ COPY --from=builder ${PREFIX_DIR} ${PREFIX_DIR}
 RUN set -ex \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && apt-get update \
-    && apt-get install -y $RUNTIME_DEPENDENCIES \
+    && apt-get install -y --no-install-recommends $RUNTIME_DEPENDENCIES \
     && apt-get install -y --no-install-recommends $(cat "${PREFIX_DIR}"/DEPENDENCIES) \
     && echo "no" | dpkg-reconfigure dash \
     && apt-get clean all \
