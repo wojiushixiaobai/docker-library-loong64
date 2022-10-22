@@ -29,7 +29,6 @@ ARG TOOLS="                       \
         ca-certificates           \
         curl                      \
         git                       \
-        gnupg                     \
         wget"
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -43,8 +42,6 @@ RUN set -ex \
     && rm -rf /var/lib/apt/lists/*
 
 RUN set -ex \
-    && wget -O - https://download.jumpserver.org/loongnix/loongnix_signing.key | apt-key add - \
-    && echo "deb http://download.jumpserver.org/loongnix DaoXiangHu main" > /etc/apt/sources.list.d/loongarch64.list \
     && apt-get update \
     && apt-get install -y --no-install-recommends freerdp2-dev \
     && apt-get clean all \
@@ -79,7 +76,6 @@ ARG RUNTIME_DEPENDENCIES="            \
         ca-certificates               \
         curl                          \
         ghostscript                   \
-        gnupg                         \
         fonts-liberation              \
         fonts-dejavu                  \
         wget                          \
@@ -96,8 +92,6 @@ RUN set -ex \
     && rm -rf /var/lib/apt/lists/*
 
 RUN set -ex \
-    && wget -O - https://download.jumpserver.org/loongnix/loongnix_signing.key | apt-key add - \
-    && echo "deb http://download.jumpserver.org/loongnix DaoXiangHu main" > /etc/apt/sources.list.d/loongarch64.list \
     && apt-get update \
     && apt-get install -y --no-install-recommends freerdp2-dev \
     && apt-get install -y --no-install-recommends $(cat "${PREFIX_DIR}"/DEPENDENCIES) \

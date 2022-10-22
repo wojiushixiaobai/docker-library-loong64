@@ -1,6 +1,6 @@
 # Docker build
 ```sh
-docker build -t nginx:alpine.
+docker build -t nginx:alpine .
 ```
 
 # Docker buildx build

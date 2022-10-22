@@ -21,7 +21,6 @@ RUN set -eux; \
 	apt-get install -y --no-install-recommends wget; \
 	rm -rf /var/lib/apt/lists/*; \
 	dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
-    wget -O - https://download.jumpserver.org/loongnix/loongnix_signing.key | apt-key add -; \
 	wget -O /usr/local/bin/gosu "https://github.com/wojiushixiaobai/gosu-loongarch64/releases/download/$GOSU_VERSION/gosu-$dpkgArch"; \
 	apt-mark auto '.*' > /dev/null; \
 	[ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; \
