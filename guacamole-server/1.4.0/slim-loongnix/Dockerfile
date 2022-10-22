@@ -29,6 +29,7 @@ ARG TOOLS="                       \
         ca-certificates           \
         curl                      \
         git                       \
+        gnupg                     \
         wget"
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -41,26 +42,12 @@ RUN set -ex \
     && echo "no" | dpkg-reconfigure dash \
     && rm -rf /var/lib/apt/lists/*
 
-ARG FreeRDP_DEB="                                                              \
-        ./freerdp2-dev_2.3.0+dfsg1-2+deb11u1_loongarch64.deb                   \
-        ./libfreerdp-client2-2_2.3.0+dfsg1-2+deb11u1_loongarch64.deb           \
-        ./libfreerdp-server2-2_2.3.0+dfsg1-2+deb11u1_loongarch64.deb           \
-        ./libfreerdp-shadow-subsystem2-2_2.3.0+dfsg1-2+deb11u1_loongarch64.deb \
-        ./libfreerdp-shadow2-2_2.3.0+dfsg1-2+deb11u1_loongarch64.deb           \
-        ./libfreerdp2-2_2.3.0+dfsg1-2+deb11u1_loongarch64.deb                  \
-        ./libwinpr2-dev_2.3.0+dfsg1-2+deb11u1_loongarch64.deb                  \
-        ./libwinpr2-2_2.3.0+dfsg1-2+deb11u1_loongarch64.deb                    \
-        ./winpr-utils_2.3.0+dfsg1-2+deb11u1_loongarch64.deb                    \
-        ./libwinpr-tools2-2_2.3.0+dfsg1-2+deb11u1_loongarch64.deb"
-
 RUN set -ex \
-    && cd /opt \
+    && wget -O - https://download.jumpserver.org/loongnix/loongnix_signing.key | apt-key add - \
+    && echo "deb http://download.jumpserver.org/loongnix DaoXiangHu main" > /etc/apt/sources.list.d/loongarch64.list \
     && apt-get update \
-    && wget https://download.jumpserver.org/files/freerdp-2.3.0.tar.gz \
-    && tar -xf freerdp-2.3.0.tar.gz \
-    && cd freerdp-2.3.0 \
-    && apt-get install -y --no-install-recommends ${FreeRDP_DEB} \
-    && rm -rf freerdp-2.3.0 freerdp-2.3.0.tar.gz \
+    && apt-get install -y --no-install-recommends freerdp2-dev \
+    && apt-get clean all \
     && rm -rf /var/lib/apt/lists/*
 
 RUN set -ex \
@@ -92,6 +79,7 @@ ARG RUNTIME_DEPENDENCIES="            \
         ca-certificates               \
         curl                          \
         ghostscript                   \
+        gnupg                         \
         fonts-liberation              \
         fonts-dejavu                  \
         wget                          \
@@ -107,28 +95,13 @@ RUN set -ex \
     && echo "no" | dpkg-reconfigure dash \
     && rm -rf /var/lib/apt/lists/*
 
-ARG FreeRDP_DEB="                                                              \
-        ./freerdp2-dev_2.3.0+dfsg1-2+deb11u1_loongarch64.deb                   \
-        ./libfreerdp-client2-2_2.3.0+dfsg1-2+deb11u1_loongarch64.deb           \
-        ./libfreerdp-server2-2_2.3.0+dfsg1-2+deb11u1_loongarch64.deb           \
-        ./libfreerdp-shadow-subsystem2-2_2.3.0+dfsg1-2+deb11u1_loongarch64.deb \
-        ./libfreerdp-shadow2-2_2.3.0+dfsg1-2+deb11u1_loongarch64.deb           \
-        ./libfreerdp2-2_2.3.0+dfsg1-2+deb11u1_loongarch64.deb                  \
-        ./libwinpr2-dev_2.3.0+dfsg1-2+deb11u1_loongarch64.deb                  \
-        ./libwinpr2-2_2.3.0+dfsg1-2+deb11u1_loongarch64.deb                    \
-        ./winpr-utils_2.3.0+dfsg1-2+deb11u1_loongarch64.deb                    \
-        ./libwinpr-tools2-2_2.3.0+dfsg1-2+deb11u1_loongarch64.deb"
-
 RUN set -ex \
-    && cd /opt \
+    && wget -O - https://download.jumpserver.org/loongnix/loongnix_signing.key | apt-key add - \
+    && echo "deb http://download.jumpserver.org/loongnix DaoXiangHu main" > /etc/apt/sources.list.d/loongarch64.list \
     && apt-get update \
-    && wget https://download.jumpserver.org/files/freerdp-2.3.0.tar.gz \
-    && tar -xf freerdp-2.3.0.tar.gz \
-    && cd freerdp-2.3.0 \
-    && apt-get install -y --no-install-recommends ${FreeRDP_DEB} \
+    && apt-get install -y --no-install-recommends freerdp2-dev \
     && apt-get install -y --no-install-recommends $(cat "${PREFIX_DIR}"/DEPENDENCIES) \
-    && cd /opt \
-    && rm -rf freerdp-2.3.0 freerdp-2.3.0.tar.gz \
+    && apt-get clean all \
     && rm -rf /var/lib/apt/lists/*
 
 RUN ${PREFIX_DIR}/bin/link-freerdp-plugins.sh \
