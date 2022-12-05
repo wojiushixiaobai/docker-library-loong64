@@ -25,7 +25,7 @@ RUN set -eux; \
 	rm -rf /var/lib/apt/lists/*
 
 ENV GPG_KEY E3FF2839C048B25C084DEBE9B26995E310250568
-ENV PYTHON_VERSION 3.8.14
+ENV PYTHON_VERSION 3.8.15
 
 RUN set -eux; \
 	\
@@ -66,9 +66,9 @@ RUN set -eux; \
 	rm python.tar.xz; \
 	\
 	cd /usr/src/python; \
-        rm -f config.sub config.guess; \
-        wget -O config.sub "git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD"; \
-        wget -O config.guess "git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD"; \
+    rm -f config.sub config.guess; \
+    wget -O config.sub "git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD"; \
+    wget -O config.guess "git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD"; \
 	gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"; \
 	./configure \
 		--build="$gnuArch" \
@@ -158,8 +158,8 @@ RUN set -eux; \
 		pinentry-curses \
 		sensible-utils \
 		xz-utils \
-        ; \
-        dpkg -l | grep "^rc" | awk '{print $2}' | xargs apt-get purge -y; \
+	; \
+	dpkg -l | grep "^rc" | awk '{print $2}' | xargs apt-get purge -y; \
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
 	apt-get clean all; \
 	rm -rf /var/lib/apt/lists/*; \
@@ -180,8 +180,8 @@ ENV PYTHON_PIP_VERSION 22.0.4
 # https://github.com/docker-library/python/issues/365
 ENV PYTHON_SETUPTOOLS_VERSION 57.5.0
 # https://github.com/pypa/get-pip
-ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/5eaac1050023df1f5c98b173b248c260023f2278/public/get-pip.py
-ENV PYTHON_GET_PIP_SHA256 5aefe6ade911d997af080b315ebcb7f882212d070465df544e1175ac2be519b4
+ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/66030fa03382b4914d4c4d0896961a0bdeeeb274/public/get-pip.py
+ENV PYTHON_GET_PIP_SHA256 1e501cf004eac1b7eb1f97266d28f995ae835d30250bec7f8850562703067dc6
 
 RUN set -eux; \
 	\
@@ -195,7 +195,7 @@ RUN set -eux; \
 	apt-mark auto '.*' > /dev/null; \
 	[ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; \
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
-        apt-get clean all; \
+    apt-get clean all; \
 	rm -rf /var/lib/apt/lists/*; \
 	\
 	export PYTHONDONTWRITEBYTECODE=1; \
