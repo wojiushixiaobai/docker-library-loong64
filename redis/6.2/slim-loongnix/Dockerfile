@@ -95,28 +95,55 @@ RUN set -eux; \
 	\
 	apt-mark auto '.*' > /dev/null; \
 	[ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; \
-	find /usr/local -type f -executable -exec ldd '{}' ';' \
-		| awk '/=>/ { print $(NF-1) }' \
-		| sort -u \
-		| xargs -r dpkg-query --search \
-		| cut -d: -f1 \
-		| sort -u \
-		| xargs -r apt-mark manual \
-	; \
-	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
-	apt-get update; \
-	apt-get install -y --no-install-recommends libssl-dev; \
-	apt-get autoremove -y binutils binutils-common binutils-loongarch64-linux-gnu \
-			bzip2 cpp cpp-8 dirmngr dpkg-dev gnupg gnupg-l10n gnupg-utils gpg \
-			gpg-agent gpg-wks-client gpg-wks-server gpgconf gpgsm libassuan0 \
-			libatomic1 libbinutils libcc1-0 libdpkg-perl libgdbm-compat4 libgdbm6 \
-			libgomp1 libldap-2.4-2 libldap-common liblocale-gettext-perl libmpc3 \
-			libmpfr6 libnpth0 libperl5.28 libreadline7 libsasl2-2 \
-			libsasl2-modules-db libsqlite3-0 libtext-charwidth-perl \
-			libtext-iconv-perl make patch perl perl-modules-5.28 pinentry-curses \
-			readline-common xz-utils \
+	ldd /usr/local/bin/redis-server | awk '/=>/ { print $(NF-1) }' | while read LIBRARY; do LIBRARY_BASENAME=$(basename "$LIBRARY"); dpkg-query -S "*/$LIBRARY_BASENAME" || true; done | cut -f1 -d: | sort -u | xargs -r apt-mark manual; \
+	apt-get autoremove -y \
+		binutils \
+		binutils-common \
+		binutils-loongarch64-linux-gnu \
+		bzip2 \
+		cpp \
+		cpp-8 \
+		dirmngr \
+		dpkg-dev \
+		gnupg gnupg-l10n \
+		gnupg-utils \
+		gpg \
+		gpg-agent \
+		gpg-wks-client \
+		gpg-wks-server \
+		gpgconf \
+		gpgsm \
+		libassuan0 \
+		libatomic1 \
+		libbinutils \
+		libcc1-0 \
+		libdpkg-perl \
+		libgdbm-compat4 \
+		libgdbm6 \
+		libgomp1 \
+		libldap-2.4-2 \
+		libldap-common \
+		liblocale-gettext-perl \
+		libmpc3 \
+		libmpfr6 \
+		libnpth0 \
+		libperl5.28 \
+		libreadline7 \
+		libsasl2-2 \
+		libsasl2-modules-db \
+		libsqlite3-0 \
+		libtext-charwidth-perl \
+		libtext-iconv-perl \
+		make \
+		patch \
+		perl \
+		perl-modules-5.28 \
+		pinentry-curses \
+		readline-common \
+		xz-utils \
 	; \
 	dpkg -l | grep "^rc" | awk '{print $2}' | xargs apt-get purge -y; \
+	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
 	apt-get clean all; \
 	rm -rf /var/lib/apt/lists/*; \
 	\
