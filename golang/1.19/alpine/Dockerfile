@@ -15,7 +15,7 @@ RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
 
 ENV PATH /usr/local/go/bin:$PATH
 
-ENV GOLANG_VERSION 1.19
+ENV GOLANG_VERSION 1.19.2
 
 RUN set -eux; \
 	apk add --no-cache --virtual .fetch-deps gnupg; \
@@ -52,8 +52,8 @@ RUN set -eux; \
 	if [ -z "$url" ]; then \
 # https://github.com/golang/go/issues/38536#issuecomment-616897960
 		build=1; \
-		url='http://ftp.loongnix.cn/toolchain/golang/go-1.19/go1.19.src.tar.gz'; \
-		sha256='001d7fea8af97e99954753d59f1d4489cca7919a8158d2e10d89526d393114b7'; \
+		url='http://ftp.loongnix.cn/toolchain/golang/go-1.19/go1.19.2.src.tar.gz'; \
+		sha256='b9402bea8ed48debb656a4e9d2cf11c4bb8cfc0e647374d7f2df9d0c9abd8ed1'; \
 # the precompiled binaries published by Go upstream are not compatible with Alpine, so we always build from source here 😅
 	fi; \
 	\
