@@ -1,7 +1,0 @@
-# manual, autoremove
-# apt-mark manual
-binutils binutils-common binutils-loongarch64-linux-gnu bzip2 cpp cpp-8 dirmngr dpkg-dev gcc gcc-8 gnupg gnupg-l10n gnupg-utils gpg gpg-agent gpg-wks-client gpg-wks-server gpgconf gpgsm libassuan0 libatomic1 libbinutils libcc1-0 libdpkg-perl libgcc-8-dev libgdbm-compat4 libgdbm6 libgomp1 libisl19 libksba8 libldap-2.4-2 libldap-common liblocale-gettext-perl libmpc3 libmpfr6 libnpth0 libsasl2-2 libsasl2-modules-db libperl5.28 libsqlite3-0 libssl1.1 libtext-charwidth-perl libtext-iconv-perl make patch perl perl-modules-5.28 pinentry-curses sensible-utils xz-utils
-
-# auto
-# apt-mark auto
-adduser apt base-files base-passwd bash bsdutils coreutils dash debconf debian-archive-keyring debianutils diffutils dpkg e2fsprogs fdisk findutils gcc-8-base gpgv grep gzip hostname init-system-helpers libacl1 libapt-pkg5.0 libattr1 libaudit-common libaudit1 libblkid1 libc-bin libcap-ng0 libcom-err2 libdb5.3 libdebconfclient0 libext2fs2 libfdisk1 libgcc1 libgcrypt20 libgmp10 libgnutls30 libgpg-error0 libhogweed4 libidn2-0 liblz4-1 libmount1 libnettle6 libp11-kit0 libpam-modules libpam-modules-bin libpam-runtime libpam0g libpcre3 libselinux1 libsemanage-common libsemanage1 libsepol1 libsmartcols1 libss2 libstdc++6 libsystemd0 libtasn1-6 libudev1 libunistring2 libzstd1 login mawk mount ncurses-base ncurses-bin openssl passwd perl-base readline-common sed sysvinit-utils tar util-linux init sysvinit-core initscripts libffi7 lsb-base startpar sysv-rc insserv
