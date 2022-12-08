@@ -53,7 +53,7 @@ RUN set -eux; \
 # https://github.com/golang/go/issues/38536#issuecomment-616897960
 		build=1; \
 		url='http://ftp.loongnix.cn/toolchain/golang/go-1.18/go1.18.8.src.tar.gz'; \
-		sha256='50672ce5bd9623c3da0860e7625214dbcb4e47df6e20992c122f731336252ccf'; \
+		sha256='bf2d9d355b900f9135c721d5194fbe56710daa6abe563dae8a39e1169a3e67bd'; \
 # the precompiled binaries published by Go upstream are not compatible with Alpine, so we always build from source here 😅
 	fi; \
 	\

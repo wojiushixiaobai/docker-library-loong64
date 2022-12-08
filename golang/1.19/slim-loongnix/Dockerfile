@@ -32,11 +32,11 @@ RUN set -eux; \
 	case "$arch" in \
 		'amd64') \
 			url='http://ftp.loongnix.cn/toolchain/golang/go-1.19/go1.19.2.linux-amd64.tar.gz'; \
-			sha256='6a8d3e176d043234679d9c8595ef79faea6e2490ea7df38b7d3536c6b13f8b28'; \
+			sha256='d42b3d5d0690e84b567b1b1e6f2c4ef67ed79953a9d28e09be13b0ec0565a0e7'; \
 			;; \
 		'loongarch64') \
 			url='http://ftp.loongnix.cn/toolchain/golang/go-1.19/go1.19.2.linux-loong64.tar.gz'; \
-			sha256='b9402bea8ed48debb656a4e9d2cf11c4bb8cfc0e647374d7f2df9d0c9abd8ed1'; \
+			sha256='d72eb5e11f438e0937d70d5c974cde8265aca66f74c1a53b890d405a2c4da144'; \
 			;; \
 		*) echo >&2 "error: unsupported architecture '$arch' (likely packaging update needed)"; exit 1 ;; \
 	esac; \
@@ -45,7 +45,7 @@ RUN set -eux; \
 # https://github.com/golang/go/issues/38536#issuecomment-616897960
 		build=1; \
 		url='http://ftp.loongnix.cn/toolchain/golang/go-1.19/go1.19.2.src.tar.gz'; \
-		sha256='b9402bea8ed48debb656a4e9d2cf11c4bb8cfc0e647374d7f2df9d0c9abd8ed1'; \
+		sha256='d5acb70f4aa96abe05f04595a6f6cb1251f551b478df4afa66955003000c7845'; \
 		echo >&2; \
 		echo >&2 "warning: current architecture ($arch) does not have a compatible Go binary release; will be building from source"; \
 		echo >&2; \
