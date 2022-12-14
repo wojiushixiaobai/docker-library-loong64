@@ -1,0 +1,9 @@
+# Docker build
+```sh
+docker build -t openjdk:8-slim-loongnix .
+```
+
+# Docker buildx build
+```sh
+docker buildx build -t openjdk:8-slim-loongnix . --load
+```
