@@ -4,7 +4,7 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM loongnix:20-slim
+FROM debian:buster-slim
 
 # install cgo-related dependencies
 RUN set -eux; \
@@ -24,19 +24,19 @@ RUN set -eux; \
 
 ENV PATH /usr/local/go/bin:$PATH
 
-ENV GOLANG_VERSION 1.19.4
+ENV GOLANG_VERSION 1.18.9
 
 RUN set -eux; \
 	arch="$(dpkg --print-architecture)"; arch="${arch##*-}"; \
 	url=; \
 	case "$arch" in \
 		'amd64') \
-			url='http://ftp.loongnix.cn/toolchain/golang/go-1.19/go1.19.4.linux-amd64.tar.gz'; \
-			sha256='00ab3392e2bf64493f3c898fc3c38b9aaafe60ae1c33e01ff63793fa49e9cec0'; \
+			url='http://ftp.loongnix.cn/toolchain/golang/go-1.18/go1.18.9.linux-amd64.tar.gz'; \
+			sha256='802a32290530b090a063bfaaa1ff1065e1119f39f1063f330217a32b1950f553'; \
 			;; \
 		'loongarch64') \
-			url='http://ftp.loongnix.cn/toolchain/golang/go-1.19/go1.19.4.linux-loong64.tar.gz'; \
-			sha256='f490e4d21ad6fa3fb151e82fe8866c14e100984283793df270b875f572051893'; \
+			url='http://ftp.loongnix.cn/toolchain/golang/go-1.18/go1.18.9.linux-loong64.tar.gz'; \
+			sha256='528dde74e6f479de6c0579ca810992961f9dd56ede3f6adc3a72d814d6b268a7'; \
 			;; \
 		*) echo >&2 "error: unsupported architecture '$arch' (likely packaging update needed)"; exit 1 ;; \
 	esac; \
@@ -44,8 +44,8 @@ RUN set -eux; \
 	if [ -z "$url" ]; then \
 # https://github.com/golang/go/issues/38536#issuecomment-616897960
 		build=1; \
-		url='http://ftp.loongnix.cn/toolchain/golang/go-1.19/go1.19.4.src.tar.gz'; \
-		sha256='5c0a8fc6b04dd57e991d2a40eebfaa8b92776879851bdd88f85fc2f78024b47f'; \
+		url='http://ftp.loongnix.cn/toolchain/golang/go-1.18/go1.18.9.src.tar.gz'; \
+		sha256='85d32f166d355290ead6ac1f95f6814a9b374988f69dec4256c6c9dbad52b13b'; \
 		echo >&2; \
 		echo >&2 "warning: current architecture ($arch) does not have a compatible Go binary release; will be building from source"; \
 		echo >&2; \

@@ -1,4 +1,4 @@
-FROM loongnix:20-slim
+FROM debian:buster-slim
 
 RUN set -ex \
     && apt-get update \

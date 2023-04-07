@@ -1,4 +1,4 @@
-FROM loongnix:20-slim
+FROM debian:buster-slim
 
 RUN groupadd --gid 1000 node \
   && useradd --uid 1000 --gid node --shell /bin/bash --create-home node

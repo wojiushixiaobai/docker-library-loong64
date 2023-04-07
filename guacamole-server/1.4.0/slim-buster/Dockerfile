@@ -1,4 +1,4 @@
-FROM loongnix:20-slim as builder
+FROM debian:buster-slim as builder
 WORKDIR /opt
 ARG GUACD_VERSION=1.4.0
 ENV LC_ALL=C.UTF-8
@@ -64,7 +64,7 @@ RUN ${PREFIX_DIR}/bin/list-dependencies.sh     \
         ${PREFIX_DIR}/lib/freerdp2/*guac*.so   \
         > ${PREFIX_DIR}/DEPENDENCIES
 
-FROM loongnix:20-slim
+FROM debian:buster-slim
 
 ARG PREFIX_DIR=/usr/local/guacamole
 
