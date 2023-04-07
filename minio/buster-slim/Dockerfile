@@ -4,8 +4,11 @@ ARG MINIO_VERSION=RELEASE.2023-03-24T21-41-23Z
 
 WORKDIR /opt
 RUN set -ex \
-    && git clone -b ${MINIO_VERSION} --depth=1 https://github.com/minio/minio.git \
-    && cd minio \
+    && git clone -b ${MINIO_VERSION} --depth=1 https://github.com/minio/minio.git
+
+ARG GOPROXY=https://goproxy.cn,direct
+WORKDIR /opt/minio
+RUN set -ex \
     && sed -i 's@s390x )@s390x | loong64 | loongarch64 )@g' buildscripts/checkdeps.sh \
     && sed -i 's@minisign@# minisign@g' dockerscripts/verify-minio.sh \
     && MINIO_RELEASE="RELEASE" make build \
@@ -19,8 +22,11 @@ ARG MC_VERSION=RELEASE.2023-03-23T20-03-04Z
 
 WORKDIR /opt
 RUN set -ex \
-    && git clone -b ${MC_VERSION} --depth=1 https://github.com/minio/mc.git \
-    && cd mc \
+    && git clone -b ${MC_VERSION} --depth=1 https://github.com/minio/mc.git
+
+ARG GOPROXY=https://goproxy.cn,direct
+WORKDIR /opt/mc
+RUN set -ex \
     && sed -i 's@s390x )@s390x | loong64 | loongarch64 )@g' buildscripts/checkdeps.sh \
     && MC_RELEASE="RELEASE" make build \
     && ./mc --version
@@ -56,7 +62,10 @@ COPY --from=builder-minio /opt/minio/minio /opt/bin/minio
 COPY --from=builder-minio /opt/minio/minio.sha256sum /opt/bin/minio.sha256sum
 COPY --from=builder-mc /opt/mc/mc /opt/bin/mc
 
+ARG APT_MIRROR=http://mirrors.ustc.edu.cn
 RUN set -ex \
+    && sed -i "s@http://.*.debian.org@${APT_MIRROR}@g" /etc/apt/sources.list \
+    && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && apt-get update \
     && apt-get install -y --no-install-recommends curl ca-certificates util-linux gzip lsof tar net-tools \
     && apt-get remove --purge --auto-remove -y && rm -rf /var/lib/apt/lists/* \
