@@ -24,19 +24,19 @@ RUN set -eux; \
 
 ENV PATH /usr/local/go/bin:$PATH
 
-ENV GOLANG_VERSION 1.19.7
+ENV GOLANG_VERSION 1.20.2
 
 RUN set -eux; \
 	arch="$(dpkg --print-architecture)"; arch="${arch##*-}"; \
 	url=; \
 	case "$arch" in \
 		'amd64') \
-			url='http://ftp.loongnix.cn/toolchain/golang/go-1.19/go1.19.7.linux-amd64.tar.gz'; \
-			sha256='21460a0f66fc1343d389c375521d963ee4afb4c31b311b76c6735e01407485a1'; \
+			url='http://ftp.loongnix.cn/toolchain/golang/go-1.20/go1.20.2.linux-amd64.tar.gz'; \
+			sha256='b03bd9d65feb4b6a62773622c3862aa33dce6f9c6fbfecb4306c67e5dbe8b1bf'; \
 			;; \
 		'loongarch64') \
-			url='http://ftp.loongnix.cn/toolchain/golang/go-1.19/go1.19.7.linux-loong64.tar.gz'; \
-			sha256='036da4ca5ed3cfcfee5bd1022f9ec80830a9990046997592b441cdb24a8f02a7'; \
+			url='http://ftp.loongnix.cn/toolchain/golang/go-1.20/go1.20.2.linux-loong64.tar.gz'; \
+			sha256='fc51ca616ab7dda418e4696232d727128abe0c02fc9386b0ead1f92f759fed57'; \
 			;; \
 		*) echo >&2 "error: unsupported architecture '$arch' (likely packaging update needed)"; exit 1 ;; \
 	esac; \
@@ -44,8 +44,8 @@ RUN set -eux; \
 	if [ -z "$url" ]; then \
 # https://github.com/golang/go/issues/38536#issuecomment-616897960
 		build=1; \
-		url='http://ftp.loongnix.cn/toolchain/golang/go-1.19/go1.19.7.src.tar.gz'; \
-		sha256='a8bb6f64aafb071cd658a2c73990ba3b2d430a196fc56bebf3d720b260dff6dd'; \
+		url='http://ftp.loongnix.cn/toolchain/golang/go-1.20/go1.20.2.src.tar.gz'; \
+		sha256='19b29bd11ad067ec9daf5d6dd0fe9079166dced9cd71fb7c572f916fe2b5753e'; \
 		echo >&2; \
 		echo >&2 "warning: current architecture ($arch) does not have a compatible Go binary release; will be building from source"; \
 		echo >&2; \

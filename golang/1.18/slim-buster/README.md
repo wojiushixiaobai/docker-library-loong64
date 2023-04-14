@@ -1,9 +1,9 @@
 # Docker build
 ```sh
-docker build -t golang:1.18-loongnix .
+docker build -t golang:1.18-buster .
 ```
 
 # Docker buildx build
 ```sh
-docker buildx build -t golang:1.18-loongnix . --load
+docker buildx build -t golang:1.18-buster . --load
 ```
