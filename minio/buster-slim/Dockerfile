@@ -1,6 +1,6 @@
 FROM golang:1.19-buster AS builder-minio
 ARG TARGETARCH
-ARG MINIO_VERSION=RELEASE.2023-03-24T21-41-23Z
+ARG MINIO_VERSION=RELEASE.2023-04-20T17-56-55Z
 
 WORKDIR /opt
 RUN set -ex \
@@ -9,7 +9,6 @@ RUN set -ex \
 ARG GOPROXY=https://goproxy.cn,direct
 WORKDIR /opt/minio
 RUN set -ex \
-    && sed -i 's@s390x )@s390x | loong64 | loongarch64 )@g' buildscripts/checkdeps.sh \
     && sed -i 's@minisign@# minisign@g' dockerscripts/verify-minio.sh \
     && MINIO_RELEASE="RELEASE" make build \
     && cp minio minio.${MINIO_VERSION} \
@@ -18,7 +17,7 @@ RUN set -ex \
 
 FROM golang:1.19-buster AS builder-mc
 ARG TARGETARCH
-ARG MC_VERSION=RELEASE.2023-03-23T20-03-04Z
+ARG MC_VERSION=RELEASE.2023-04-12T02-21-51Z
 
 WORKDIR /opt
 RUN set -ex \
