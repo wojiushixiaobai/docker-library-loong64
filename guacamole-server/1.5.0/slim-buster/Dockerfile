@@ -85,6 +85,7 @@ ARG BUILD_DEPENDENCIES="          \
         g++                       \
         libcairo2-dev             \
         libjpeg62-turbo-dev       \
+        libssl-dev                \
         libtool                   \
         libwebp-dev               \
         make"
