@@ -24,23 +24,15 @@ ENV LANG C.UTF-8
 # >
 # > Java Development Kit builds, from Oracle
 # >
-ENV JAVA_VERSION 17.0.3
+ENV JAVA_VERSION 17.0.6
 
 RUN set -eux; \
 	\
 	arch="$(dpkg --print-architecture)"; \
 	case "$arch" in \
-		'amd64') \
-			downloadUrl='https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz'; \
-			downloadSha256='0022753d0cceecacdd3a795dd4cea2bd7ffdf9dc06e22ffd1be98411742fbb44'; \
-			;; \
-		'arm64') \
-			downloadUrl='https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-aarch64_bin.tar.gz'; \
-			downloadSha256='13bfd976acf8803f862e82c7113fb0e9311ca5458b1decaef8a09ffd91119fa4'; \
-			;; \
 		'loongarch64') \
-			downloadUrl='http://ftp.loongnix.cn/Java/openjdk17/loongson17.2.0-jdk17.0.3_7-linux-loongarch64.tar.gz'; \
-			downloadSha256='cf54652ab505fe6a0f09d2bd83bb35bc8b0fe38f19a08f11775d9cdc84fc6df1'; \
+			downloadUrl='http://ftp.loongnix.cn/Java/openjdk17/loongson17.4.0-fx-jdk17.0.6_10-linux-loongarch64.tar.gz'; \
+			downloadSha256='d5d7bd125405f7b7e95bacdbb6ecdbdd18a0c7f6d59208f21d37c6f08b1ece46'; \
 			;; \
 		*) echo >&2 "error: unsupported architecture: '$arch'"; exit 1 ;; \
 	esac; \

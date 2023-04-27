@@ -27,7 +27,7 @@ ENV LANG C.UTF-8
 # >
 # > These binaries are built by Red Hat on their infrastructure on behalf of the OpenJDK jdk8u and jdk11u projects. The binaries are created from the unmodified source code at OpenJDK. Although no formal support agreement is provided, please report any bugs you may find to https://bugs.java.com/.
 # >
-ENV JAVA_VERSION 8u332
+ENV JAVA_VERSION 8u362
 # https://github.com/docker-library/openjdk/issues/320#issuecomment-494050246
 # >
 # > I am the OpenJDK 8 and 11 Updates OpenJDK project lead.
@@ -39,14 +39,8 @@ RUN set -eux; \
 	\
 	arch="$(dpkg --print-architecture)"; \
     case "$arch" in \
-		'amd64') \
-			downloadUrl='https://github.com/AdoptOpenJDK/openjdk8-upstream-binaries/releases/download/jdk8u332-b09/OpenJDK8U-jdk_x64_linux_8u332b09.tar.gz'; \
-			;; \
-		'arm64') \
-			downloadUrl='https://github.com/AdoptOpenJDK/openjdk8-upstream-binaries/releases/download/jdk8u332-b09/OpenJDK8U-jdk_aarch64_linux_8u332b09.tar.gz'; \
-			;; \
 		'loongarch64') \
-			downloadUrl='http://ftp.loongnix.cn/Java/openjdk8/loongson8.1.11-jdk8u332b09-linux-loongarch64.tar.gz'; \
+			downloadUrl='http://ftp.loongnix.cn/Java/openjdk8/loongson8.1.13-fx-jdk8u362b09-linux-loongarch64.tar.gz'; \
 			;; \
 		*) echo >&2 "error: unsupported architecture: '$arch'"; exit 1 ;; \
 	esac; \
