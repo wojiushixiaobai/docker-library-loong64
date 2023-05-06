@@ -1,6 +1,6 @@
 FROM golang:1.19-buster AS builder-minio
 ARG TARGETARCH
-ARG MINIO_VERSION=RELEASE.2023-04-20T17-56-55Z
+ARG MINIO_VERSION=RELEASE.2023-05-04T21-44-30Z
 
 WORKDIR /opt
 RUN set -ex \
@@ -17,7 +17,7 @@ RUN set -ex \
 
 FROM golang:1.19-buster AS builder-mc
 ARG TARGETARCH
-ARG MC_VERSION=RELEASE.2023-04-12T02-21-51Z
+ARG MC_VERSION=RELEASE.2023-05-04T18-10-16Z
 
 WORKDIR /opt
 RUN set -ex \
@@ -26,7 +26,6 @@ RUN set -ex \
 ARG GOPROXY=https://goproxy.cn,direct
 WORKDIR /opt/mc
 RUN set -ex \
-    && sed -i 's@s390x )@s390x | loong64 | loongarch64 )@g' buildscripts/checkdeps.sh \
     && MC_RELEASE="RELEASE" make build \
     && ./mc --version
 
