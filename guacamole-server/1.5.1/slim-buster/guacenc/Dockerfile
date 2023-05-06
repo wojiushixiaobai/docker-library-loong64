@@ -75,6 +75,7 @@ ENV LD_LIBRARY_PATH=${PREFIX_DIR}/lib
 
 ARG RUNTIME_DEPENDENCIES="            \
         ca-certificates               \
+        ffmpeg                        \
         fonts-dejavu                  \
         fonts-liberation              \
         ghostscript                   \
