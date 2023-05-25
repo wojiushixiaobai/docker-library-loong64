@@ -23,7 +23,12 @@ RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
     && ln -s /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
     && rm "node-v$NODE_VERSION-linux-$ARCH.tar.xz" "yarn-v$YARN_VERSION.tar.gz" \
     && apt-mark auto '.*' > /dev/null \
-    && ldd /usr/local/bin/node | awk '/=>/ { print $(NF-1) }' | while read LIBRARY; do LIBRARY_BASENAME=$(basename "$LIBRARY"); dpkg-query -S "*/$LIBRARY_BASENAME" || true; done | cut -f1 -d: | sort -u | xargs -r apt-mark manual \
+    && find /usr/local -type f -executable -exec ldd '{}' ';' \
+      | awk '/=>/ { print $(NF-1) }' \
+      | while read LIBRARY; do LIBRARY_BASENAME=$(basename "$LIBRARY"); dpkg-query -S "*/$LIBRARY_BASENAME" || true; done \
+      | cut -f1 -d: \
+      | sort -u \
+      | xargs -r apt-mark manual \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && ln -s /usr/local/bin/node /usr/local/bin/nodejs \
     # smoke tests
