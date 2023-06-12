@@ -43,9 +43,7 @@ ARG TOOLS="                       \
         wget"
 
 ARG DEBIAN_FRONTEND=noninteractive
-ARG APT_MIRROR=http://mirrors.ustc.edu.cn
 RUN set -ex \
-    && sed -i "s@http://.*.debian.org@${APT_MIRROR}@g" /etc/apt/sources.list \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && apt-get update \
     && apt-get install -y --no-install-recommends $BUILD_DEPENDENCIES \
@@ -85,9 +83,7 @@ ARG RUNTIME_DEPENDENCIES="            \
 ARG DEBIAN_FRONTEND=noninteractive
 COPY --from=builder ${PREFIX_DIR} ${PREFIX_DIR}
 
-ARG APT_MIRROR=http://mirrors.ustc.edu.cn
 RUN set -ex \
-    && sed -i "s@http://.*.debian.org@${APT_MIRROR}@g" /etc/apt/sources.list \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && apt-get update \
     && apt-get install -y --no-install-recommends $RUNTIME_DEPENDENCIES \

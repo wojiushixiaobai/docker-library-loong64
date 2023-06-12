@@ -1,6 +1,6 @@
 FROM golang:1.19-buster AS builder-minio
 ARG TARGETARCH
-ARG MINIO_VERSION=RELEASE.2023-05-18T00-05-36Z
+ARG MINIO_VERSION=RELEASE.2023-06-09T07-32-12Z
 
 WORKDIR /opt
 RUN set -ex \
@@ -17,7 +17,7 @@ RUN set -ex \
 
 FROM golang:1.19-buster AS builder-mc
 ARG TARGETARCH
-ARG MC_VERSION=RELEASE.2023-05-18T16-59-00Z
+ARG MC_VERSION=RELEASE.2023-06-06T13-48-56Z
 
 WORKDIR /opt
 RUN set -ex \
@@ -60,12 +60,10 @@ COPY --from=builder-minio /opt/minio/minio /opt/bin/minio
 COPY --from=builder-minio /opt/minio/minio.sha256sum /opt/bin/minio.sha256sum
 COPY --from=builder-mc /opt/mc/mc /opt/bin/mc
 
-ARG APT_MIRROR=http://mirrors.ustc.edu.cn
 RUN set -ex \
-    && sed -i "s@http://.*.debian.org@${APT_MIRROR}@g" /etc/apt/sources.list \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && apt-get update \
-    && apt-get install -y --no-install-recommends curl ca-certificates util-linux gzip lsof tar net-tools \
+    && apt-get install -y --no-install-recommends curl ca-certificates util-linux gzip lsof tar net-tools iproute2 iputils-ping jq \
     && apt-get remove --purge --auto-remove -y && rm -rf /var/lib/apt/lists/* \
     && chmod +x /usr/bin/verify-minio.sh \
     && chmod +x /usr/bin/docker-entrypoint.sh \
