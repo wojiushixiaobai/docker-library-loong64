@@ -37,6 +37,7 @@ RUN set -eux; \
 		'arm64') \
 			downloadUrl='https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.7%2B7/OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.7_7.tar.gz'; \
 			downloadSha256='0084272404b89442871e0a1f112779844090532978ad4d4191b8d03fc6adfade'; \
+			;; \
 		'loongarch64') \
 			downloadUrl='http://ftp.loongnix.cn/Java/openjdk17/loongson17.5.0-fx-jdk17.0.7_7-linux-loongarch64.tar.gz'; \
 			downloadSha256='6ead13a133d68285129247d2e343bb7de54d4ae16e2ff3c470717ff66f290db7'; \
