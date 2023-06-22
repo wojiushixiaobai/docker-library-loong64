@@ -1,0 +1,9 @@
+# Docker build
+```sh
+docker build -t buildpack-deps:buster-curl .
+```
+
+# Docker buildx build
+```sh
+docker buildx build -t buildpack-deps:buster-curl . --load
+```

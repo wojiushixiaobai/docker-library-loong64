@@ -1,9 +1,3 @@
-#
-# NOTE: THIS DOCKERFILE IS GENERATED VIA "apply-templates.sh"
-#
-# PLEASE DO NOT EDIT IT DIRECTLY.
-#
-
 FROM debian:buster-slim
 
 RUN set -eux; \
@@ -12,6 +6,7 @@ RUN set -eux; \
 # utilities for keeping Debian and OpenJDK CA certificates in sync
 		ca-certificates p11-kit \
 	; \
+	apt-get clean all; \
 	rm -rf /var/lib/apt/lists/*
 
 ENV JAVA_HOME /usr/local/openjdk-8
@@ -27,7 +22,7 @@ ENV LANG C.UTF-8
 # >
 # > These binaries are built by Red Hat on their infrastructure on behalf of the OpenJDK jdk8u and jdk11u projects. The binaries are created from the unmodified source code at OpenJDK. Although no formal support agreement is provided, please report any bugs you may find to https://bugs.java.com/.
 # >
-ENV JAVA_VERSION 8u362
+ENV JAVA_VERSION 8u372
 # https://github.com/docker-library/openjdk/issues/320#issuecomment-494050246
 # >
 # > I am the OpenJDK 8 and 11 Updates OpenJDK project lead.
@@ -38,9 +33,15 @@ ENV JAVA_VERSION 8u362
 RUN set -eux; \
 	\
 	arch="$(dpkg --print-architecture)"; \
-    case "$arch" in \
+	case "$arch" in \
+		'amd64') \
+			downloadUrl='https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u372-b07/OpenJDK8U-jdk_x64_linux_hotspot_8u372b07.tar.gz'; \
+			;; \
+		'arm64') \
+			downloadUrl='https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u372-b07/OpenJDK8U-jdk_aarch64_linux_hotspot_8u372b07.tar.gz'; \
+			;; \
 		'loongarch64') \
-			downloadUrl='http://ftp.loongnix.cn/Java/openjdk8/loongson8.1.13-fx-jdk8u362b09-linux-loongarch64.tar.gz'; \
+			downloadUrl='http://ftp.loongnix.cn/Java/openjdk8/loongson8.1.14-fx-jdk8u372b07-linux-loongarch64.tar.gz'; \
 			;; \
 		*) echo >&2 "error: unsupported architecture: '$arch'"; exit 1 ;; \
 	esac; \
@@ -52,6 +53,7 @@ RUN set -eux; \
 		gnupg \
 		wget \
 	; \
+	apt-get clean all; \
 	rm -rf /var/lib/apt/lists/*; \
 	\
 	wget --progress=dot:giga -O openjdk.tgz "$downloadUrl"; \

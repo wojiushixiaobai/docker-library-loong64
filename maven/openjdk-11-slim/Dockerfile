@@ -1,14 +1,13 @@
-FROM openjdk:8-jdk-slim
-
+FROM openjdk:11-jdk-slim
 
 RUN apt-get update \
   && apt-get install -y curl procps \
   && apt-get clean all \
   && rm -rf /var/lib/apt/lists/*
 
-ARG MAVEN_VERSION=3.8.6
+ARG MAVEN_VERSION=3.9.2
 ARG USER_HOME_DIR="/root"
-ARG SHA=f790857f3b1f90ae8d16281f902c689e4f136ebe584aba45e4b1fa66c80cba826d3e0e52fdd04ed44b4c66f6d3fe3584a057c26dfcac544a60b301e6d0f91c26
+ARG SHA=900bdeeeae550d2d2b3920fe0e00e41b0069f32c019d566465015bdd1b3866395cbe016e22d95d25d51d3a5e614af2c83ec9b282d73309f644859bbad08b63db
 ARG BASE_URL=https://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries
 
 RUN mkdir -p /usr/share/maven /usr/share/maven/ref \

@@ -12,6 +12,7 @@ RUN set -eux; \
 # utilities for keeping Debian and OpenJDK CA certificates in sync
 		ca-certificates p11-kit \
 	; \
+	apt-get clean all; \
 	rm -rf /var/lib/apt/lists/*
 
 ENV JAVA_HOME /usr/local/openjdk-11
@@ -27,7 +28,7 @@ ENV LANG C.UTF-8
 # >
 # > These binaries are built by Red Hat on their infrastructure on behalf of the OpenJDK jdk8u and jdk11u projects. The binaries are created from the unmodified source code at OpenJDK. Although no formal support agreement is provided, please report any bugs you may find to https://bugs.java.com/.
 # >
-ENV JAVA_VERSION 11.0.18
+ENV JAVA_VERSION 11.0.19
 # https://github.com/docker-library/openjdk/issues/320#issuecomment-494050246
 # >
 # > I am the OpenJDK 8 and 11 Updates OpenJDK project lead.
@@ -39,8 +40,14 @@ RUN set -eux; \
 	\
 	arch="$(dpkg --print-architecture)"; \
 	case "$arch" in \
+		'amd64') \
+			downloadUrl='https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.19%2B7/OpenJDK11U-jdk_x64_alpine-linux_hotspot_11.0.19_7.tar.gz'; \
+			;; \
+		'arm64') \
+			downloadUrl='https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.19%2B7/OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.19_7.tar.gz'; \
+			;; \
 		'loongarch64') \
-			downloadUrl='http://ftp.loongnix.cn/Java/openjdk11/loongson11.4.0-fx-jdk11.0.18_10-linux-loongarch64.tar.gz'; \
+			downloadUrl='http://ftp.loongnix.cn/Java/openjdk11/loongson11.5.0-fx-jdk11.0.19_7-linux-loongarch64.tar.gz'; \
 			;; \
 		*) echo >&2 "error: unsupported architecture: '$arch'"; exit 1 ;; \
 	esac; \
@@ -52,6 +59,7 @@ RUN set -eux; \
 		gnupg \
 		wget \
 	; \
+	apt-get clean all; \
 	rm -rf /var/lib/apt/lists/*; \
 	\
     wget --progress=dot:giga -O openjdk.tgz "$downloadUrl"; \

@@ -24,15 +24,22 @@ ENV LANG C.UTF-8
 # >
 # > Java Development Kit builds, from Oracle
 # >
-ENV JAVA_VERSION 17.0.6
+ENV JAVA_VERSION 17.0.7
 
 RUN set -eux; \
 	\
 	arch="$(dpkg --print-architecture)"; \
 	case "$arch" in \
+		'amd64') \
+			downloadUrl='https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.7%2B7/OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7.tar.gz'; \
+			downloadSha256='e9458b38e97358850902c2936a1bb5f35f6cffc59da9fcd28c63eab8dbbfbc3b'; \
+			;; \
+		'arm64') \
+			downloadUrl='https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.7%2B7/OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.7_7.tar.gz'; \
+			downloadSha256='0084272404b89442871e0a1f112779844090532978ad4d4191b8d03fc6adfade'; \
 		'loongarch64') \
-			downloadUrl='http://ftp.loongnix.cn/Java/openjdk17/loongson17.4.0-fx-jdk17.0.6_10-linux-loongarch64.tar.gz'; \
-			downloadSha256='d5d7bd125405f7b7e95bacdbb6ecdbdd18a0c7f6d59208f21d37c6f08b1ece46'; \
+			downloadUrl='http://ftp.loongnix.cn/Java/openjdk17/loongson17.5.0-fx-jdk17.0.7_7-linux-loongarch64.tar.gz'; \
+			downloadSha256='6ead13a133d68285129247d2e343bb7de54d4ae16e2ff3c470717ff66f290db7'; \
 			;; \
 		*) echo >&2 "error: unsupported architecture: '$arch'"; exit 1 ;; \
 	esac; \
