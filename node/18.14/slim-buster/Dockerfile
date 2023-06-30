@@ -31,12 +31,12 @@ RUN set -ex \
     && apt-mark auto '.*' > /dev/null \
     && find /usr/local -type f -executable -exec ldd '{}' ';' \
       | awk '/=>/ { print $(NF-1) }' \
-      | while read LIBRARY; do LIBRARY_BASENAME=$(basename "$LIBRARY"); dpkg-query -S "*/$LIBRARY_BASENAME" || true; done \
-      | cut -f1 -d: \
+      | sort -u \
+      | xargs -r dpkg-query --search \
+      | cut -d: -f1 \
       | sort -u \
       | xargs -r apt-mark manual \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
-    && apt-get clean all \
     && rm -rf /var/lib/apt/lists/* \
     && ln -s /usr/local/bin/node /usr/local/bin/nodejs \
     # smoke tests
@@ -66,11 +66,12 @@ RUN set -ex \
   && apt-mark auto '.*' > /dev/null \
   && { [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; } \
   && find /usr/local -type f -executable -exec ldd '{}' ';' \
-    | awk '/=>/ { print $(NF-1) }' \
-    | while read LIBRARY; do LIBRARY_BASENAME=$(basename "$LIBRARY"); dpkg-query -S "*/$LIBRARY_BASENAME" || true; done \
-    | cut -f1 -d: \
-    | sort -u \
-    | xargs -r apt-mark manual \
+      | awk '/=>/ { print $(NF-1) }' \
+      | sort -u \
+      | xargs -r dpkg-query --search \
+      | cut -d: -f1 \
+      | sort -u \
+      | xargs -r apt-mark manual \
   && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   # smoke test
   && yarn --version

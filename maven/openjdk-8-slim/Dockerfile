@@ -2,7 +2,6 @@ FROM openjdk:8-slim-buster
 
 RUN apt-get update \
   && apt-get install -y curl procps \
-  && apt-get clean all \
   && rm -rf /var/lib/apt/lists/*
 
 ARG MAVEN_VERSION=3.9.2

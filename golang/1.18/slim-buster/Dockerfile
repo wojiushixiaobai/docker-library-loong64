@@ -19,7 +19,6 @@ RUN set -eux; \
 		pkg-config \
         wget \
 	; \
-    apt-get clean all; \
 	rm -rf /var/lib/apt/lists/*
 
 ENV PATH /usr/local/go/bin:$PATH
@@ -74,7 +73,6 @@ RUN set -eux; \
 		apt-mark auto '.*' > /dev/null; \
 		apt-mark manual $savedAptMark > /dev/null; \
 		apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
-		apt-get clean all; \
 		rm -rf /var/lib/apt/lists/*; \
 		\
 # remove a few intermediate / bootstrapping files the official binary release tarballs do not contain

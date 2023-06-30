@@ -6,7 +6,6 @@ RUN set -eux; \
 # utilities for keeping Debian and OpenJDK CA certificates in sync
 		ca-certificates p11-kit \
 	; \
-	apt-get clean all; \
 	rm -rf /var/lib/apt/lists/*
 
 ENV JAVA_HOME /usr/local/openjdk-8
@@ -53,7 +52,6 @@ RUN set -eux; \
 		gnupg \
 		wget \
 	; \
-	apt-get clean all; \
 	rm -rf /var/lib/apt/lists/*; \
 	\
 	wget --progress=dot:giga -O openjdk.tgz "$downloadUrl"; \

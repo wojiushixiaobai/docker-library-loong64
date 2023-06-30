@@ -39,13 +39,11 @@ RUN set -ex \
     && apt-get install -y --no-install-recommends $BUILD_DEPENDENCIES \
     && apt-get install -y --no-install-recommends $TOOLS \
     && echo "no" | dpkg-reconfigure dash \
-    && apt-get clean all \
     && rm -rf /var/lib/apt/lists/*
 
 RUN set -ex \
     && apt-get update \
     && apt-get install -y --no-install-recommends freerdp2-dev \
-    && apt-get clean all \
     && rm -rf /var/lib/apt/lists/*
 
 RUN set -ex \
@@ -90,7 +88,6 @@ RUN set -ex \
     && apt-get install -y --no-install-recommends $RUNTIME_DEPENDENCIES \
     && apt-get install -y --no-install-recommends $(cat "${PREFIX_DIR}"/DEPENDENCIES) \
     && echo "no" | dpkg-reconfigure dash \
-    && apt-get clean all \
     && rm -rf /var/lib/apt/lists/*
 
 RUN ${PREFIX_DIR}/bin/link-freerdp-plugins.sh \

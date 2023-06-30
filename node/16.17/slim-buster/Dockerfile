@@ -25,8 +25,9 @@ RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
     && apt-mark auto '.*' > /dev/null \
     && find /usr/local -type f -executable -exec ldd '{}' ';' \
       | awk '/=>/ { print $(NF-1) }' \
-      | while read LIBRARY; do LIBRARY_BASENAME=$(basename "$LIBRARY"); dpkg-query -S "*/$LIBRARY_BASENAME" || true; done \
-      | cut -f1 -d: \
+      | sort -u \
+      | xargs -r dpkg-query --search \
+      | cut -d: -f1 \
       | sort -u \
       | xargs -r apt-mark manual \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \

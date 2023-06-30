@@ -21,11 +21,10 @@ RUN set -eux; \
 		netbase \
 		tzdata \
 	; \
-	apt-get clean all; \
 	rm -rf /var/lib/apt/lists/*
 
 ENV GPG_KEY E3FF2839C048B25C084DEBE9B26995E310250568
-ENV PYTHON_VERSION 3.9.16
+ENV PYTHON_VERSION 3.9.17
 
 RUN set -eux; \
 	\
@@ -34,10 +33,11 @@ RUN set -eux; \
 	apt-get install -y --no-install-recommends \
 		dpkg-dev \
 		gcc \
-		gnupg dirmngr \
+		gnupg \
 		libbluetooth-dev \
 		libbz2-dev \
 		libc6-dev \
+		libdb-dev \
 		libexpat1-dev \
 		libffi-dev \
 		libgdbm-dev \
@@ -59,7 +59,7 @@ RUN set -eux; \
 	GNUPGHOME="$(mktemp -d)"; export GNUPGHOME; \
 	gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys "$GPG_KEY"; \
 	gpg --batch --verify python.tar.xz.asc python.tar.xz; \
-	command -v gpgconf > /dev/null && gpgconf --kill all || :; \
+	gpgconf --kill all; \
 	rm -rf "$GNUPGHOME" python.tar.xz.asc; \
 	mkdir -p /usr/src/python; \
 	tar --extract --directory /usr/src/python --strip-components=1 --file python.tar.xz; \
@@ -80,8 +80,22 @@ RUN set -eux; \
 		--without-ensurepip \
 	; \
 	nproc="$(nproc)"; \
+	EXTRA_CFLAGS="$(dpkg-buildflags --get CFLAGS)"; \
+	LDFLAGS="$(dpkg-buildflags --get LDFLAGS)"; \
+	LDFLAGS="${LDFLAGS:--Wl},--strip-all"; \
 	make -j "$nproc" \
-		LDFLAGS="-Wl,--strip-all" \
+		"EXTRA_CFLAGS=${EXTRA_CFLAGS:-}" \
+		"LDFLAGS=${LDFLAGS:-}" \
+		"PROFILE_TASK=${PROFILE_TASK:-}" \
+	; \
+# https://github.com/docker-library/python/issues/784
+# prevent accidental usage of a system installed libpython of the same version
+	rm python; \
+	make -j "$nproc" \
+		"EXTRA_CFLAGS=${EXTRA_CFLAGS:-}" \
+		"LDFLAGS=${LDFLAGS:--Wl},-rpath='\$\$ORIGIN/../lib'" \
+		"PROFILE_TASK=${PROFILE_TASK:-}" \
+		python \
 	; \
 	make install; \
 	\
@@ -92,7 +106,6 @@ RUN set -eux; \
 		\( \
 			\( -type d -a \( -name test -o -name tests -o -name idle_test \) \) \
 			-o \( -type f -a \( -name '*.pyc' -o -name '*.pyo' -o -name 'libpython*.a' \) \) \
-			-o \( -type f -a -name 'wininst-*.exe' \) \
 		\) -exec rm -rf '{}' + \
 	; \
 	\
@@ -108,60 +121,7 @@ RUN set -eux; \
 		| sort -u \
 		| xargs -r apt-mark manual \
 	; \
-	apt-get autoremove -y \
-		binutils \
-		binutils-common \
-		binutils-loongarch64-linux-gnu \
-		bzip2 \
-		cpp \
-		cpp-8 \
-		dirmngr \
-		dpkg-dev \
-		gcc \
-		gcc-8 \
-		gnupg \
-		gnupg-l10n \
-		gnupg-utils \
-		gpg \
-		gpg-agent \
-		gpg-wks-client \
-		gpg-wks-server \
-		gpgconf \
-		gpgsm \
-		libassuan0 \
-		libatomic1 \
-		libbinutils \
-		libcc1-0 \
-		libdpkg-perl \
-		libgcc-8-dev \
-		libgdbm-compat4 \
-		libgdbm6 \
-		libgomp1 \
-		libisl19 \
-		libksba8 \
-		libldap-2.4-2 \
-		libldap-common \
-		liblocale-gettext-perl \
-		libmpc3 \
-		libmpfr6 \
-		libnpth0 \
-		libsasl2-2 \
-		libsasl2-modules-db \
-		libperl5.28 \
-		libsqlite3-0 \
-		libtext-charwidth-perl \
-		libtext-iconv-perl \
-		make \
-		patch \
-		perl \
-		perl-modules-5.28 \
-		pinentry-curses \
-		sensible-utils \
-		xz-utils \
-	; \
-	dpkg -l | grep "^rc" | awk '{print $2}' | xargs apt-get purge -y; \
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
-	apt-get clean all; \
 	rm -rf /var/lib/apt/lists/*; \
 	\
 	python3 --version
@@ -176,18 +136,18 @@ RUN set -eux; \
 	done
 
 # if this is called "PIP_VERSION", pip explodes with "ValueError: invalid truth value '<VERSION>'"
-ENV PYTHON_PIP_VERSION 22.0.4
+ENV PYTHON_PIP_VERSION 23.0.1
 # https://github.com/docker-library/python/issues/365
 ENV PYTHON_SETUPTOOLS_VERSION 58.1.0
 # https://github.com/pypa/get-pip
-ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/66030fa03382b4914d4c4d0896961a0bdeeeb274/public/get-pip.py
-ENV PYTHON_GET_PIP_SHA256 1e501cf004eac1b7eb1f97266d28f995ae835d30250bec7f8850562703067dc6
+ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/0d8570dc44796f4369b652222cf176b3db6ac70e/public/get-pip.py
+ENV PYTHON_GET_PIP_SHA256 96461deced5c2a487ddc65207ec5a9cffeca0d34e7af7ea1afc470ff0d746207
 
 RUN set -eux; \
 	\
 	savedAptMark="$(apt-mark showmanual)"; \
 	apt-get update; \
-	apt-get install -y --no-install-recommends wget ca-certificates; \
+	apt-get install -y --no-install-recommends wget; \
 	\
 	wget -O get-pip.py "$PYTHON_GET_PIP_URL"; \
 	echo "$PYTHON_GET_PIP_SHA256 *get-pip.py" | sha256sum -c -; \
@@ -195,7 +155,6 @@ RUN set -eux; \
 	apt-mark auto '.*' > /dev/null; \
 	[ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; \
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
-    apt-get clean all; \
 	rm -rf /var/lib/apt/lists/*; \
 	\
 	export PYTHONDONTWRITEBYTECODE=1; \

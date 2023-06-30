@@ -65,7 +65,7 @@ RUN set -ex \
     && apt-get update \
     && apt-get install -y --no-install-recommends curl ca-certificates util-linux gzip lsof tar net-tools iproute2 iputils-ping jq \
     && apt-get remove --purge --auto-remove -y \
-    && apt-get clean all && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /var/lib/apt/lists/* \
     && chmod +x /usr/bin/verify-minio.sh \
     && chmod +x /usr/bin/docker-entrypoint.sh \
     && chmod +x /opt/bin/minio \

@@ -60,5 +60,4 @@ RUN set -ex; \
 			fi \
 		) \
 	; \
-    apt-get clean all; \
 	rm -rf /var/lib/apt/lists/*

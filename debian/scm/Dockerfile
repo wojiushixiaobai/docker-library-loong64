@@ -14,5 +14,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 		subversion \
 		\
 		procps \
-    && apt-get clean all \
 	&& rm -rf /var/lib/apt/lists/*

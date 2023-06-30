@@ -11,7 +11,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 		curl \
 		netbase \
 		wget \
-    && apt-get clean all \
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN set -ex; \
@@ -21,6 +20,5 @@ RUN set -ex; \
 			gnupg \
 			dirmngr \
 		; \
-        apt-get clean all; \
 		rm -rf /var/lib/apt/lists/*; \
 	fi
