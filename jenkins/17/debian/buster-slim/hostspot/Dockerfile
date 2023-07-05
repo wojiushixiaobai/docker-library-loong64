@@ -2,7 +2,6 @@ FROM openjdk:17-slim-buster as jre-build
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends binutils git \
-    && git lfs install \
     && rm -rf /var/lib/apt/lists/*
 
 RUN jlink \
