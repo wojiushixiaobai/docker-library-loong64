@@ -7,8 +7,6 @@
     [the Docker Community Slack](https://dockr.ly/comm-slack), [Server Fault](https://serverfault.com/help/on-topic), [Unix & Linux](https://unix.stackexchange.com/help/on-topic), or [Stack Overflow](https://stackoverflow.com/help/on-topic)
 
 # Supported tags and respective Dockerfile links
-- [10.1-jdk17-buster, 10.1-jdk17](https://github.com/docker-library/tomcat/blob/2b200acb84bebc3e867f32e3b64f19620aa60b58/8.5/jdk8/corretto-al2/Dockerfile)
-- [10.1-jdk11-buster, 10.1-jdk11](https://github.com/docker-library/tomcat/blob/2b200acb84bebc3e867f32e3b64f19620aa60b58/8.5/jdk8/corretto-al2/Dockerfile)
 - [9.0-jdk17-buster, 9.0-jdk17](https://github.com/docker-library/tomcat/blob/2b200acb84bebc3e867f32e3b64f19620aa60b58/8.5/jdk8/corretto-al2/Dockerfile)
 - [9.0-jdk11-buster, 9.0-jdk11](https://github.com/docker-library/tomcat/blob/2b200acb84bebc3e867f32e3b64f19620aa60b58/8.5/jdk8/corretto-al2/Dockerfile)
 - [9.0-jdk8-buster, 9.0-jdk8](https://github.com/docker-library/tomcat/blob/2b200acb84bebc3e867f32e3b64f19620aa60b58/8.5/jdk8/corretto-al2/Dockerfile)
