@@ -1,0 +1,9 @@
+# Docker build
+```sh
+docker build -t buildpack-deps:buster .
+```
+
+# Docker buildx build
+```sh
+docker buildx build -t buildpack-deps:buster . --load
+```
