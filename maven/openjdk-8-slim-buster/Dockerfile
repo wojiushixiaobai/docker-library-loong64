@@ -1,12 +1,12 @@
-FROM openjdk:8-slim-buster
+FROM jumpserver/openjdk:8-slim-buster
 
 RUN apt-get update \
   && apt-get install -y curl procps \
   && rm -rf /var/lib/apt/lists/*
 
-ARG MAVEN_VERSION=3.9.3
+ARG MAVEN_VERSION=3.9.4
 ARG USER_HOME_DIR="/root"
-ARG SHA=400fc5b6d000c158d5ee7937543faa06b6bda8408caa2444a9c947c21472fde0f0b64ac452b8cec8855d528c0335522ed5b6c8f77085811c7e29e1bedbb5daa2
+ARG SHA=deaa39e16b2cf20f8cd7d232a1306344f04020e1f0fb28d35492606f647a60fe729cc40d3cba33e093a17aed41bd161fe1240556d0f1b80e773abd408686217e
 ARG BASE_URL=https://downloads.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries
 
 RUN mkdir -p /usr/share/maven /usr/share/maven/ref \

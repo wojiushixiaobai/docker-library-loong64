@@ -3,9 +3,9 @@
 [the Docker Community](https://github.com/wojiushixiaobai/docker-library-loong64)
 
 Supported tags and respective Dockerfile links
-- [3.9.3-openjdk-17-slim](https://github.com/wojiushixiaobai/docker-library-loong64/blob/master/maven/openjdk-17-slim/Dockerfile)
-- [3.9.3-openjdk-11-slim](https://github.com/wojiushixiaobai/docker-library-loong64/blob/master/maven/openjdk-11-slim/Dockerfile)
-- [3.9.3-openjdk-8-slim](https://github.com/wojiushixiaobai/docker-library-loong64/blob/master/maven/openjdk-8-slim/Dockerfile)
+- [3.9.4-openjdk-17-slim](https://github.com/wojiushixiaobai/docker-library-loong64/blob/master/maven/openjdk-17-slim/Dockerfile)
+- [3.9.4-openjdk-11-slim](https://github.com/wojiushixiaobai/docker-library-loong64/blob/master/maven/openjdk-11-slim/Dockerfile)
+- [3.9.4-openjdk-8-slim](https://github.com/wojiushixiaobai/docker-library-loong64/blob/master/maven/openjdk-8-slim/Dockerfile)
 
 # Quick reference (cont.)
 - Where to file issues:  
@@ -25,7 +25,7 @@ Source of this description:
 # How to use this image
 You can run a Maven project by using the Maven Docker image directly, passing a Maven command to docker run:
 ```
-$ docker run -it --rm --name my-maven-project -v "$(pwd)":/usr/src/mymaven -w /usr/src/mymaven jumpserver/maven:3.9.3-openjdk-8-slim mvn clean install
+$ docker run -it --rm --name my-maven-project -v "$(pwd)":/usr/src/mymaven -w /usr/src/mymaven jumpserver/maven:3.9.4-openjdk-8-slim mvn clean install
 ```
 ## Building local Docker image (optional)
 This is a base image that you can extend, so it has the bare minimum packages needed. If you add custom package(s) to the `Dockerfile`, then you can build your local Docker image like this:
