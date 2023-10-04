@@ -1,4 +1,4 @@
-FROM golang:1.19-buster AS builder-minio
+FROM golang:1.20-buster AS builder-minio
 ARG TARGETARCH
 ARG MINIO_VERSION=RELEASE.2023-06-09T07-32-12Z
 
