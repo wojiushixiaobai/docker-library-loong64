@@ -4,6 +4,7 @@
 
 # Supported tags and respective Dockerfile links
 - [18.13-buster-slim, 18.13](https://github.com/wojiushixiaobai/docker-library-loong64/blob/master/node/18.13/buster-slim/Dockerfile)
+- [16.20-buster-slim, 16.20](https://github.com/wojiushixiaobai/docker-library-loong64/blob/master/node/16.20/buster-slim/Dockerfile)
 - [16.17-buster-slim, 16.17](https://github.com/wojiushixiaobai/docker-library-loong64/blob/master/node/16.17/buster-slim/Dockerfile)
 - [16.5-buster-slim, 16.5](https://github.com/wojiushixiaobai/docker-library-loong64/blob/master/node/16.5/buster-slim/Dockerfile)
 - [16.3-buster-slim, 16.3](https://github.com/wojiushixiaobai/docker-library-loong64/blob/master/node/16.3/buster-slim/Dockerfile)
