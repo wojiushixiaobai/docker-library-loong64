@@ -41,6 +41,7 @@ RUN set -eux; \
 		'ppc64le') \
 			downloadUrl='https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.8%2B7/OpenJDK17U-jdk_ppc64le_linux_hotspot_17.0.8_7.tar.gz'; \
 			downloadSha256='88f5d14cc84a4bcfe50aa275092ae97a0edf7205269ed12c1972bf613bc52b1e'; \
+			;; \
 		's390x') \
 			downloadUrl='https://github.com/ibmruntimes/semeru17-binaries/releases/download/jdk-17.0.8%2B7_openj9-0.40.0/ibm-semeru-open-jdk_s390x_linux_17.0.8_7_openj9-0.40.0.tar.gz'; \
 			downloadSha256='e5e42e5203346a6c4af588cac72883d550723f4d3cd0ba21cb2240e309c30feb'; \
@@ -90,9 +91,7 @@ RUN set -eux; \
 	\
 # https://github.com/docker-library/openjdk/issues/212#issuecomment-420979840
 # https://openjdk.java.net/jeps/341
-	if [ "${$arch}" != "s390x" ]; then \
-	  java -Xshare:dump; \
-  fi \
+	java -Xshare:dump; \
 	\
 # basic smoke test
 	fileEncoding="$(echo 'System.out.println(System.getProperty("file.encoding"))' | jshell -s -)"; [ "$fileEncoding" = 'UTF-8' ]; rm -rf ~/.java; \
