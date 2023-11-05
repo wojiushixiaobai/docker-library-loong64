@@ -8,6 +8,11 @@ RUN groupadd -r mysql && useradd -r -g mysql mysql
 # gosu key is B42F6819007F00F88E364FD4036A9C25BF357DD4
 ENV GOSU_VERSION 1.14
 
+ARG GPG_KEYS=177F4010FE56CA3336300305F1656F24C74CD1D8
+# pub   rsa4096 2016-03-30 [SC]
+#         177F 4010 FE56 CA33 3630  0305 F165 6F24 C74C D1D8
+# uid           [ unknown] MariaDB Signing Key <signing-key@mariadb.org>
+# sub   rsa4096 2016-03-30 [E]
 # install "libjemalloc2" as it offers better performance in some cases. Use with LD_PRELOAD
 # install "pwgen" for randomizing passwords
 # install "tzdata" for /usr/share/zoneinfo/
@@ -43,6 +48,17 @@ RUN set -eux; \
 			echo >&2 "error: unsupported architecture: ${dpkgArch}"; \
 			;; \
 	esac; \
+	GNUPGHOME="$(mktemp -d)"; \
+	export GNUPGHOME; \
+	gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
+	for key in $GPG_KEYS; do \
+		gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key"; \
+	done; \
+	gpg --batch --export "$GPG_KEYS" > /etc/apt/trusted.gpg.d/mariadb.gpg; \
+	if command -v gpgconf >/dev/null; then \
+		gpgconf --kill all; \
+	fi; \
+	rm -rf "$GNUPGHOME"; \
 	apt-mark auto '.*' > /dev/null; \
 	[ -z "$savedAptMark" ] ||	apt-mark manual $savedAptMark >/dev/null; \
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
