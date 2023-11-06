@@ -87,7 +87,7 @@ LABEL org.opencontainers.image.authors="MariaDB Community" \
 # bashbrew-architectures: amd64 arm64 loong64
 ARG MARIADB_MAJOR=10.6
 ENV MARIADB_MAJOR $MARIADB_MAJOR
-ARG MARIADB_VERSION=1:10.6.15+maria~Deb10
+ARG MARIADB_VERSION=1:10.6.15+maria~deb10
 ENV MARIADB_VERSION $MARIADB_VERSION
 # release-status:Stable
 # release-support-type:Long Term Support

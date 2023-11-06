@@ -1,7 +1,4 @@
-FROM debian:buster-slim
-
-# add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
-RUN groupadd -r mysql && useradd -r -g mysql mysql
+FROM debian:bullseye-slim
 
 # add gosu for easy step-down from root
 # https://github.com/tianon/gosu/releases
@@ -37,17 +34,8 @@ RUN set -eux; \
 		wget; \
 	rm -rf /var/lib/apt/lists/*; \
 	dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
-	case $dpkgArch in \
-	    "amd64"|"arm64") \
-			wget -q -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch"; \
-			;; \
-		"loongarch64") \
-			wget -q -O /usr/local/bin/gosu "https://github.com/wojiushixiaobai/gosu-loongarch64/releases/download/$GOSU_VERSION/gosu-$dpkgArch"; \
-			;; \
-		*) \
-			echo >&2 "error: unsupported architecture: ${dpkgArch}"; \
-			;; \
-	esac; \
+	wget -q -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch"; \
+	wget -q -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc"; \
 	GNUPGHOME="$(mktemp -d)"; \
 	export GNUPGHOME; \
 	gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
@@ -58,7 +46,9 @@ RUN set -eux; \
 	if command -v gpgconf >/dev/null; then \
 		gpgconf --kill all; \
 	fi; \
-	rm -rf "$GNUPGHOME"; \
+	gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
+	gpgconf --kill all; \
+	rm -rf "$GNUPGHOME" /usr/local/bin/gosu.asc; \
 	apt-mark auto '.*' > /dev/null; \
 	[ -z "$savedAptMark" ] ||	apt-mark manual $savedAptMark >/dev/null; \
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
@@ -77,36 +67,27 @@ LABEL org.opencontainers.image.authors="MariaDB Community" \
       org.opencontainers.image.title="MariaDB Database" \
       org.opencontainers.image.description="MariaDB Database for relational SQL" \
       org.opencontainers.image.documentation="https://hub.docker.com/_/mariadb/" \
-      org.opencontainers.image.base.name="docker.io/library/debian:buster-slim" \
+      org.opencontainers.image.base.name="docker.io/library/debian:bullseye-slim" \
       org.opencontainers.image.licenses="GPL-2.0" \
-      org.opencontainers.image.source="https://github.com/wojiushixiaobai/docker-library-loong64" \
+      org.opencontainers.image.source="https://github.com/MariaDB/mariadb-docker" \
       org.opencontainers.image.vendor="MariaDB Community" \
-      org.opencontainers.image.version="10.11.5" \
-      org.opencontainers.image.url="https://github.com/wojiushixiaobai/docker-library-loong64"
+      org.opencontainers.image.version="10.6.15" \
+      org.opencontainers.image.url="https://github.com/MariaDB/mariadb-docker"
 
-# bashbrew-architectures: amd64 arm64 loong64
-ARG MARIADB_VERSION=1:10.11.5+maria~deb10
+# bashbrew-architectures: amd64 arm64v8 ppc64le s390x
+ARG MARIADB_MAJOR=10.6
+ENV MARIADB_MAJOR $MARIADB_MAJOR
+ARG MARIADB_VERSION=1:10.6.15+maria~deb11
 ENV MARIADB_VERSION $MARIADB_VERSION
 # release-status:Stable
 # release-support-type:Long Term Support
 # (https://downloads.mariadb.org/rest-api/mariadb/)
 
 # Allowing overriding of REPOSITORY, a URL that includes suite and component for testing and Enterprise Versions
+ARG REPOSITORY="http://archive.mariadb.org/mariadb-10.6.15/repo/debian/ bullseye main main/debug"
+
 RUN set -e;\
-	dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
-	case $dpkgArch in \
-		"amd64"|"arm64") \
-		    REPOSITORY="http://archive.mariadb.org/mariadb-10.11.5/repo/debian/ buster main main/debug"; \
-			echo "deb ${REPOSITORY}" > /etc/apt/sources.list.d/mariadb.list; \
-			;; \
-		"loongarch64") \
-			REPOSITORY="http://download.jumpserver.org/mariadb/mariadb-10.11.5/repo/debian/ buster main main/debug"; \
-			echo "deb ${REPOSITORY}" > /etc/apt/sources.list.d/mariadb.list; \
-			;; \
-		*) \
-			echo >&2 "error: unsupported architecture: ${dpkgArch}"; \
-			;; \
-	esac; \
+	echo "deb ${REPOSITORY}" > /etc/apt/sources.list.d/mariadb.list; \
 	{ \
 		echo 'Package: *'; \
 		echo 'Pin: release o=MariaDB'; \
@@ -120,8 +101,8 @@ RUN set -e;\
 # hadolint ignore=DL3015
 RUN set -ex; \
 	{ \
-		echo "mariadb-server" mysql-server/root_password password 'unused'; \
-		echo "mariadb-server" mysql-server/root_password_again password 'unused'; \
+		echo "mariadb-server-$MARIADB_MAJOR" mysql-server/root_password password 'unused'; \
+		echo "mariadb-server-$MARIADB_MAJOR" mysql-server/root_password_again password 'unused'; \
 	} | debconf-set-selections; \
 	apt-get update; \
 # postinst script creates a datadir, so avoid creating it by faking its existance.
