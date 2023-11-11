@@ -49,6 +49,7 @@ RUN set -ex \
     && apt-get install -y --no-install-recommends $BUILD_DEPENDENCIES \
     && apt-get install -y --no-install-recommends $TOOLS \
     && echo "no" | dpkg-reconfigure dash \
+    && sed -i "s@/usr/bin/@/bin/@g" /usr/bin/libtoolize \
     && rm -rf /var/lib/apt/lists/*
 
 RUN set -ex \
