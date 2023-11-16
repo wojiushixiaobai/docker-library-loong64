@@ -81,13 +81,13 @@ LABEL org.opencontainers.image.authors="MariaDB Community" \
       org.opencontainers.image.licenses="GPL-2.0" \
       org.opencontainers.image.source="https://github.com/wojiushixiaobai/docker-library-loong64" \
       org.opencontainers.image.vendor="MariaDB Community" \
-      org.opencontainers.image.version="10.6.15" \
+      org.opencontainers.image.version="10.6.16" \
       org.opencontainers.image.url="https://github.com/wojiushixiaobai/docker-library-loong64"
 
 # bashbrew-architectures: amd64 arm64 loong64
 ARG MARIADB_MAJOR=10.6
 ENV MARIADB_MAJOR $MARIADB_MAJOR
-ARG MARIADB_VERSION=1:10.6.15+maria~deb10
+ARG MARIADB_VERSION=1:10.6.16+maria~deb10
 ENV MARIADB_VERSION $MARIADB_VERSION
 # release-status:Stable
 # release-support-type:Long Term Support
@@ -98,11 +98,11 @@ RUN set -e;\
 	dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
 	case $dpkgArch in \
 		"amd64"|"arm64") \
-		    REPOSITORY="http://archive.mariadb.org/mariadb-10.6.15/repo/debian/ buster main main/debug"; \
+		    REPOSITORY="http://archive.mariadb.org/mariadb-10.6.16/repo/debian/ buster main main/debug"; \
 			echo "deb ${REPOSITORY}" > /etc/apt/sources.list.d/mariadb.list; \
 			;; \
 		"loongarch64") \
-			REPOSITORY="http://download.jumpserver.org/mariadb/mariadb-10.6.15/repo/debian/ buster main main/debug"; \
+			REPOSITORY="http://download.jumpserver.org/mariadb/mariadb-10.6.16/repo/debian/ buster main main/debug"; \
 			echo "deb ${REPOSITORY}" > /etc/apt/sources.list.d/mariadb.list; \
 			;; \
 		*) \
