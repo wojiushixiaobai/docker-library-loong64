@@ -23,8 +23,8 @@ docker buildx build \
     --build-arg JENKINS_SHA=${JENKINS_SHA} \
     --build-arg COMMIT_SHA=${COMMIT_SHA} \
     --build-arg RELEASE_LINE=war-stable \
-    --tag jumpserver/jenkins:lts-jdk11 \
-    --tag jumpserver/jenkins:${JENKINS_VERSION}-lts-jdk11 \
+    --tag jumpserver/jenkins:lts-jdk21 \
+    --tag jumpserver/jenkins:${JENKINS_VERSION}-lts-jdk21 \
     --push \
     .
 
@@ -36,8 +36,9 @@ docker buildx build \
     --build-arg JENKINS_VERSION=${JENKINS_VERSION} \
     --build-arg JENKINS_SHA=${JENKINS_SHA} \
     --build-arg RELEASE_LINE=war \
-    --tag jumpserver/jenkins:jdk11 \
-    --tag jumpserver/jenkins:${JENKINS_VERSION}-jdk11 \
+    --tag jumpserver/jenkins:jdk21 \
+    --tag jumpserver/jenkins:${JENKINS_VERSION}-jdk21 \
     --push \
     .
+
 ```

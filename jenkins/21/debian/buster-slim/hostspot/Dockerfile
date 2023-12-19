@@ -1,4 +1,4 @@
-FROM openjdk:11-slim-buster as jre-build
+FROM openjdk:21-slim-buster as jre-build
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends binutils git \
@@ -118,9 +118,6 @@ COPY --from=jre-build /opt/jenkins-docker/jenkins.sh /usr/local/bin/jenkins.sh
 COPY --from=jre-build /opt/jenkins-docker/jenkins-plugin-cli.sh /bin/jenkins-plugin-cli
 
 ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
-
-# from a derived Dockerfile, can use `RUN install-plugins.sh active.txt` to setup $REF/plugins from a support bundle
-COPY --from=jre-build /opt/jenkins-docker/install-plugins.sh /usr/local/bin/install-plugins.sh
 
 # metadata labels
 LABEL \
