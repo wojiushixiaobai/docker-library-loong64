@@ -40,7 +40,7 @@ RUN set -eux; \
 			;; \
 		'loongarch64') \
 			downloadUrl='http://ftp.loongnix.cn/Java/openjdk21/loongson21.1.0-fx-jdk21_35-linux-loongarch64.tar.gz'; \
-			downloadSha256='c958c9124c582b08be316ac3c9c7af1595d8cca6f744fc9ff194206871503adb'; \
+			downloadSha256='d43efb6faa2d099250b2b8b5923d9793683109c66d1b8b69db35d607d4341c41'; \
 			;; \
 		*) echo >&2 "error: unsupported architecture: '$arch'"; exit 1 ;; \
 	esac; \
