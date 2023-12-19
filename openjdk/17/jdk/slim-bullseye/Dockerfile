@@ -24,27 +24,27 @@ ENV LANG C.UTF-8
 # >
 # > Java Development Kit builds, from Oracle
 # >
-ENV JAVA_VERSION 17.0.8
+ENV JAVA_VERSION 17.0.9
 
 RUN set -eux; \
 	\
 	arch="$(dpkg --print-architecture)"; \
 	case "$arch" in \
 		'amd64') \
-			downloadUrl='https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.8%2B7/OpenJDK17U-jdk_x64_linux_hotspot_17.0.8_7.tar.gz'; \
-			downloadSha256='aa5fc7d388fe544e5d85902e68399d5299e931f9b280d358a3cbee218d6017b0'; \
+			downloadUrl='https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.9%2B9/OpenJDK17U-jdk_x64_linux_hotspot_17.0.9_9.tar.gz'; \
+			downloadSha256='7b175dbe0d6e3c9c23b6ed96449b018308d8fc94a5ecd9c0df8b8bc376c3c18a'; \
 			;; \
 		'arm64') \
-			downloadUrl='https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.8%2B7/OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.8_7.tar.gz'; \
-			downloadSha256='c43688163cfdcb1a6e6fe202cc06a51891df746b954c55dbd01430e7d7326d00'; \
+			downloadUrl='https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.9%2B9/OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.9_9.tar.gz'; \
+			downloadSha256='e2c5e26f8572544b201bc22a9b28f2b1a3147ab69be111cea07c7f52af252e75'; \
 			;; \
 		'ppc64le') \
-			downloadUrl='https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.8%2B7/OpenJDK17U-jdk_ppc64le_linux_hotspot_17.0.8_7.tar.gz'; \
-			downloadSha256='88f5d14cc84a4bcfe50aa275092ae97a0edf7205269ed12c1972bf613bc52b1e'; \
+			downloadUrl='https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.9%2B9/OpenJDK17U-jdk_ppc64le_linux_hotspot_17.0.9_9.tar.gz'; \
+			downloadSha256='3ae4b254d5b720f94f986481e787fbd67f0667571140ba2e2ae5020ceddbc826'; \
 			;; \
 		's390x') \
-			downloadUrl='https://github.com/ibmruntimes/semeru17-binaries/releases/download/jdk-17.0.8%2B7_openj9-0.40.0/ibm-semeru-open-jdk_s390x_linux_17.0.8_7_openj9-0.40.0.tar.gz'; \
-			downloadSha256='e5e42e5203346a6c4af588cac72883d550723f4d3cd0ba21cb2240e309c30feb'; \
+			downloadUrl='https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.9%2B9/OpenJDK17U-jdk_s390x_linux_hotspot_17.0.9_9.tar.gz'; \
+			downloadSha256='45562179b9b623331f741a3a12b298a4d4b901555862148963c86ae7b10d320a'; \
 			;; \
 		*) echo >&2 "error: unsupported architecture: '$arch'"; exit 1 ;; \
 	esac; \
