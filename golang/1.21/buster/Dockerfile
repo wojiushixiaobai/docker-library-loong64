@@ -65,7 +65,6 @@ RUN set -eux; \
 		*) echo >&2 "error: unsupported architecture '$arch' (likely packaging update needed)"; exit 1 ;; \
 	esac; \
 	\
-	wget -O go.tgz.asc "$url.asc"; \
 	wget -O go.tgz "$url" --progress=dot:giga; \
 	echo "$sha256 *go.tgz" | sha256sum -c -; \
 	tar -C /usr/local -xzf go.tgz; \
