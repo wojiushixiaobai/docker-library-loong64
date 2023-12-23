@@ -20,109 +20,64 @@ RUN set -eux; \
 
 ENV PATH /usr/local/go/bin:$PATH
 
-ENV GOLANG_VERSION 1.21.0
+ENV GOLANG_VERSION 1.21.5
 
 RUN set -eux; \
 	arch="$(dpkg --print-architecture)"; arch="${arch##*-}"; \
 	url=; \
 	case "$arch" in \
 		'amd64') \
-			url='https://dl.google.com/go/go1.21.0.linux-amd64.tar.gz'; \
-			sha256='d0398903a16ba2232b389fb31032ddf57cac34efda306a0eebac34f0965a0742'; \
-			;; \
-		'armel') \
-			export GOARCH='arm' GOARM='5' GOOS='linux'; \
+			url='https://dl.google.com/go/go1.21.5.linux-amd64.tar.gz'; \
+			sha256='e2bc0b3e4b64111ec117295c088bde5f00eeed1567999ff77bc859d7df70078e'; \
 			;; \
 		'armhf') \
-			url='https://dl.google.com/go/go1.21.0.linux-armv6l.tar.gz'; \
-			sha256='e377a0004957c8c560a3ff99601bce612330a3d95ba3b0a2ae144165fc87deb1'; \
+			url='https://dl.google.com/go/go1.21.5.linux-armv6l.tar.gz'; \
+			sha256='837f4bf4e22fcdf920ffeaa4abf3d02d1314e03725431065f4d44c46a01b42fe'; \
 			;; \
 		'arm64') \
-			url='https://dl.google.com/go/go1.21.0.linux-arm64.tar.gz'; \
-			sha256='f3d4548edf9b22f26bbd49720350bbfe59d75b7090a1a2bff1afad8214febaf3'; \
+			url='https://dl.google.com/go/go1.21.5.linux-arm64.tar.gz'; \
+			sha256='841cced7ecda9b2014f139f5bab5ae31785f35399f236b8b3e75dff2a2978d96'; \
 			;; \
 		'i386') \
-			url='https://dl.google.com/go/go1.21.0.linux-386.tar.gz'; \
-			sha256='0e6f378d9b072fab0a3d9ff4d5e990d98487d47252dba8160015a61e6bd0bcba'; \
+			url='https://dl.google.com/go/go1.21.5.linux-386.tar.gz'; \
+			sha256='8f4dba9cf5c61757bbd7e9ebdb93b6a30a1b03f4a636a1ba0cc2f27b907ab8e1'; \
 			;; \
 		'mips64el') \
-			url='https://dl.google.com/go/go1.21.0.linux-mips64le.tar.gz'; \
-			sha256='92f7933d997c589b4f506c6b3cc5b27ff43b294c3a2d40bf4d7eeaf375f92afb'; \
+			url='https://dl.google.com/go/go1.21.5.linux-mips64le.tar.gz'; \
+			sha256='0799ce6a33181d09d623551e108b8d48359ace39eef9dc935f3140618f844f12'; \
 			;; \
 		'ppc64el') \
-			url='https://dl.google.com/go/go1.21.0.linux-ppc64le.tar.gz'; \
-			sha256='e938ffc81d8ebe5efc179240960ba22da6a841ff05d5cab7ce2547112b14a47f'; \
+			url='https://dl.google.com/go/go1.21.5.linux-ppc64le.tar.gz'; \
+			sha256='907b8c6ec4be9b184952e5d3493be66b1746442394a8bc78556c56834cd7c38b'; \
 			;; \
 		'riscv64') \
-			url='https://dl.google.com/go/go1.21.0.linux-riscv64.tar.gz'; \
-			sha256='87b21c06573617842ca9e00b954bc9f534066736a0778eae594ac54b45a9e8b7'; \
+			url='https://dl.google.com/go/go1.21.5.linux-riscv64.tar.gz'; \
+			sha256='984d8f999f5019d15527a1a0e6b0c3ef879833e26dcd422ab0ef4d81ac486b96'; \
 			;; \
 		's390x') \
-			url='https://dl.google.com/go/go1.21.0.linux-s390x.tar.gz'; \
-			sha256='be7338df8e5d5472dfa307b0df2b446d85d001b0a2a3cdb1a14048d751b70481'; \
+			url='https://dl.google.com/go/go1.21.5.linux-s390x.tar.gz'; \
+			sha256='9c4a81b72ebe44368813cd03684e1080a818bf915d84163abae2ed325a1b2dc0'; \
 			;; \
 		'loongarch64') \
-			url='http://ftp.loongnix.cn/toolchain/golang/go-1.21/abi1.0/go1.21.0.linux-loong64.tar.gz'; \
-			sha256='f103d0758c178f567d2148f2955249e3531e57504221748f2ec5ef1b4d49c9c3'; \
+			url='http://ftp.loongnix.cn/toolchain/golang/go-1.21/abi1.0/go1.21.5.linux-loong64.tar.gz'; \
+			sha256='68c0d5ba6cdf55ab3cd26cb67fccf1ad0c9a79e3f69a99c5cafff18c88eee3f3'; \
 			;; \
 		*) echo >&2 "error: unsupported architecture '$arch' (likely packaging update needed)"; exit 1 ;; \
 	esac; \
-	build=; \
-	if [ -z "$url" ]; then \
-# https://github.com/golang/go/issues/38536#issuecomment-616897960
-		build=1; \
-		url='https://dl.google.com/go/go1.21.0.src.tar.gz'; \
-		sha256='818d46ede85682dd551ad378ef37a4d247006f12ec59b5b755601d2ce114369a'; \
-		echo >&2; \
-		echo >&2 "warning: current architecture ($arch) does not have a compatible Go binary release; will be building from source"; \
-		echo >&2; \
-	fi; \
 	\
+	wget -O go.tgz.asc "$url.asc"; \
 	wget -O go.tgz "$url" --progress=dot:giga; \
 	echo "$sha256 *go.tgz" | sha256sum -c -; \
 	tar -C /usr/local -xzf go.tgz; \
 	rm go.tgz; \
 	\
-	if [ -n "$build" ]; then \
-		savedAptMark="$(apt-mark showmanual)"; \
-# add backports for newer go version for bootstrap build: https://github.com/golang/go/issues/44505
-		( \
-			. /etc/os-release; \
-			echo "deb https://deb.debian.org/debian $VERSION_CODENAME-backports main" > /etc/apt/sources.list.d/backports.list; \
-			\
-			apt-get update; \
-			apt-get install -y --no-install-recommends -t "$VERSION_CODENAME-backports" golang-go; \
-		); \
-		\
-		export GOCACHE='/tmp/gocache'; \
-		\
-		( \
-			cd /usr/local/go/src; \
-# set GOROOT_BOOTSTRAP + GOHOST* such that we can build Go successfully
-			export GOROOT_BOOTSTRAP="$(go env GOROOT)" GOHOSTOS="$GOOS" GOHOSTARCH="$GOARCH"; \
-			./make.bash; \
-		); \
-		\
-		apt-mark auto '.*' > /dev/null; \
-		apt-mark manual $savedAptMark > /dev/null; \
-		apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
-		rm -rf /var/lib/apt/lists/*; \
-		\
-# remove a few intermediate / bootstrapping files the official binary release tarballs do not contain
-		rm -rf \
-			/usr/local/go/pkg/*/cmd \
-			/usr/local/go/pkg/bootstrap \
-			/usr/local/go/pkg/obj \
-			/usr/local/go/pkg/tool/*/api \
-			/usr/local/go/pkg/tool/*/go_bootstrap \
-			/usr/local/go/src/cmd/dist/dist \
-			"$GOCACHE" \
-		; \
-	fi; \
-	\
 	go version
+
+# don't auto-upgrade the gotoolchain
+# https://github.com/docker-library/golang/issues/472
+ENV GOTOOLCHAIN=local
 
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:$PATH
-RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
+RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 1777 "$GOPATH"
 WORKDIR $GOPATH

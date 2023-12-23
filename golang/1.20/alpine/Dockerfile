@@ -8,14 +8,9 @@ FROM alpine:3.11
 
 RUN apk add --no-cache ca-certificates
 
-# set up nsswitch.conf for Go's "netgo" implementation
-# - https://github.com/golang/go/blob/go1.9.1/src/net/conf.go#L194-L275
-# - docker run --rm debian grep '^hosts:' /etc/nsswitch.conf
-RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
-
 ENV PATH /usr/local/go/bin:$PATH
 
-ENV GOLANG_VERSION 1.20.6
+ENV GOLANG_VERSION 1.20.12
 
 RUN set -eux; \
 	apk add --no-cache --virtual .fetch-deps gnupg; \
@@ -40,6 +35,9 @@ RUN set -eux; \
 		'ppc64le') \
 			export GOARCH='ppc64le' GOOS='linux'; \
 			;; \
+		'riscv64') \
+			export GOARCH='riscv64' GOOS='linux'; \
+			;; \
 		's390x') \
 			export GOARCH='s390x' GOOS='linux'; \
 			;; \
@@ -52,8 +50,8 @@ RUN set -eux; \
 	if [ -z "$url" ]; then \
 # https://github.com/golang/go/issues/38536#issuecomment-616897960
 		build=1; \
-		url='http://ftp.loongnix.cn/toolchain/golang/go-1.20/abi1.0/go1.20.6.src.tar.gz'; \
-		sha256='e1543072bad7696bce60715ef7a15cf22634cd5c330accdeced4df7d81d6395b'; \
+		url='http://ftp.loongnix.cn/toolchain/golang/go-1.20/abi1.0/go1.20.12.src.tar.gz'; \
+		sha256='1524f894808a5f3425be835d2c55441efcc6f093a44c7079f40bbf458d39e62d'; \
 # the precompiled binaries published by Go upstream are not compatible with Alpine, so we always build from source here 😅
 	fi; \
 	\
