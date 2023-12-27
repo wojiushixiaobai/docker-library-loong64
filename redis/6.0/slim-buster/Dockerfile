@@ -1,11 +1,22 @@
 FROM debian:buster-slim
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
-RUN groupadd -r -g 999 redis && useradd -r -g redis -u 999 redis
+RUN set -eux; \
+	groupadd -r -g 999 redis; \
+	useradd -r -g redis -u 999 redis
+
+# runtime dependencies
+RUN set -eux; \
+	apt-get update; \
+	apt-get install -y --no-install-recommends \
+# add tzdata explicitly for https://github.com/docker-library/redis/issues/138 (see also https://bugs.debian.org/837060 and related)
+		tzdata \
+	; \
+	rm -rf /var/lib/apt/lists/*
 
 # grab gosu for easy step-down from root
 # https://github.com/tianon/gosu/releases
-ENV GOSU_VERSION 1.16
+ENV GOSU_VERSION 1.17
 RUN set -eux; \
 	savedAptMark="$(apt-mark showmanual)"; \
 	apt-get update; \
@@ -24,9 +35,9 @@ RUN set -eux; \
 	gosu --version; \
 	gosu nobody true
 
-ENV REDIS_VERSION 6.0.19
-ENV REDIS_DOWNLOAD_URL http://download.redis.io/releases/redis-6.0.19.tar.gz
-ENV REDIS_DOWNLOAD_SHA 55e26318c3d9c53a77a6e802f60524afdddd057a2e965cebcf781a0a72f0e3e6
+ENV REDIS_VERSION 6.0.20
+ENV REDIS_DOWNLOAD_URL http://download.redis.io/releases/redis-6.0.20.tar.gz
+ENV REDIS_DOWNLOAD_SHA 173d4c5f44b5d7186da96c4adc5cb20e8018b50ec3a8dfe0d191dbbab53952f0
 
 RUN set -eux; \
 	\
@@ -108,7 +119,9 @@ RUN set -eux; \
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
 	\
 	redis-cli --version; \
-	redis-server --version
+	redis-server --version; \
+	\
+	echo '{"spdxVersion":"SPDX-2.3","SPDXID":"SPDXRef-DOCUMENT","name":"redis-server-sbom","packages":[{"name":"redis-server","versionInfo":"6.0.20","SPDXID":"SPDXRef-Package--redis-server","externalRefs":[{"referenceCategory":"PACKAGE-MANAGER","referenceType":"purl","referenceLocator":"pkg:generic/redis-server@6.0.20?os_name=debian&os_version=bookworm"}],"licenseDeclared":"BSD-3-Clause"}]}' > /usr/local/redis.spdx.json
 
 RUN mkdir /data && chown redis:redis /data
 VOLUME /data
