@@ -1,12 +1,12 @@
 FROM debian:buster-slim
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
-RUN groupadd -r mysql && useradd -r -g mysql mysql
+RUN groupadd -r mysql && useradd -r -g mysql mysql --home-dir /var/lib/mysql
 
 # add gosu for easy step-down from root
 # https://github.com/tianon/gosu/releases
 # gosu key is B42F6819007F00F88E364FD4036A9C25BF357DD4
-ENV GOSU_VERSION 1.14
+ENV GOSU_VERSION 1.17
 
 ARG GPG_KEYS=177F4010FE56CA3336300305F1656F24C74CD1D8
 # pub   rsa4096 2016-03-30 [SC]
@@ -55,6 +55,7 @@ RUN set -eux; \
 		gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key"; \
 	done; \
 	gpg --batch --export "$GPG_KEYS" > /etc/apt/trusted.gpg.d/mariadb.gpg; \
+	wget -qO - https://dl.cloudsmith.io/public/jumpserver/mariadb-10-11-6/gpg.714A71B00036D18E.key | gpg --dearmor > /etc/apt/trusted.gpg.d/jumpserver-mariadb.gpg; \
 	if command -v gpgconf >/dev/null; then \
 		gpgconf --kill all; \
 	fi; \
@@ -100,7 +101,7 @@ RUN set -e;\
 			echo "deb ${REPOSITORY}" > /etc/apt/sources.list.d/mariadb.list; \
 			;; \
 		"loongarch64") \
-			REPOSITORY="http://download.jumpserver.org/mariadb/mariadb-10.11.6/repo/debian/ buster main main/debug"; \
+			REPOSITORY="https://dl.cloudsmith.io/public/jumpserver/mariadb-10-11-6/deb/debian/ buster main"; \
 			echo "deb ${REPOSITORY}" > /etc/apt/sources.list.d/mariadb.list; \
 			;; \
 		*) \
@@ -120,8 +121,8 @@ RUN set -e;\
 # hadolint ignore=DL3015
 RUN set -ex; \
 	{ \
-		echo "mariadb-server" mysql-server/root_password password 'unused'; \
-		echo "mariadb-server" mysql-server/root_password_again password 'unused'; \
+		echo "mariadb-server-$MARIADB_MAJOR" mysql-server/root_password password 'unused'; \
+		echo "mariadb-server-$MARIADB_MAJOR" mysql-server/root_password_again password 'unused'; \
 	} | debconf-set-selections; \
 	apt-get update; \
 # postinst script creates a datadir, so avoid creating it by faking its existance.
@@ -132,10 +133,10 @@ RUN set -ex; \
 	rm -rf /var/lib/apt/lists/*; \
 # purge and re-create /var/lib/mysql with appropriate ownership
 	rm -rf /var/lib/mysql /etc/mysql/mariadb.conf.d/50-mysqld_safe.cnf; \
-	mkdir -p /var/lib/mysql /var/run/mysqld; \
-	chown -R mysql:mysql /var/lib/mysql /var/run/mysqld; \
-# ensure that /var/run/mysqld (used for socket and lock files) is writable regardless of the UID our mysqld instance ends up having at runtime
-	chmod 777 /var/run/mysqld; \
+	mkdir -p /var/lib/mysql /run/mysqld; \
+	chown -R mysql:mysql /var/lib/mysql /run/mysqld; \
+# ensure that /run/mysqld (used for socket and lock files) is writable regardless of the UID our mysqld instance ends up having at runtime
+	chmod 1777 /run/mysqld; \
 # comment out a few problematic configuration values
 	find /etc/mysql/ -name '*.cnf' -print0 \
 		| xargs -0 grep -lZE '^(bind-address|log|user\s)' \

@@ -1,5 +1,5 @@
 # vim:set ft=dockerfile:
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r mysql && useradd -r -g mysql mysql --home-dir /var/lib/mysql
@@ -72,7 +72,7 @@ LABEL org.opencontainers.image.authors="MariaDB Community" \
       org.opencontainers.image.title="MariaDB Database" \
       org.opencontainers.image.description="MariaDB Database for relational SQL" \
       org.opencontainers.image.documentation="https://hub.docker.com/_/mariadb/" \
-      org.opencontainers.image.base.name="docker.io/library/debian:bullseye-slim" \
+      org.opencontainers.image.base.name="docker.io/library/debian:bookworm-slim" \
       org.opencontainers.image.licenses="GPL-2.0" \
       org.opencontainers.image.source="https://github.com/MariaDB/mariadb-docker" \
       org.opencontainers.image.vendor="MariaDB Community" \
@@ -80,7 +80,7 @@ LABEL org.opencontainers.image.authors="MariaDB Community" \
       org.opencontainers.image.url="https://github.com/MariaDB/mariadb-docker"
 
 # bashbrew-architectures: amd64 arm64v8 ppc64le s390x
-ARG MARIADB_VERSION=1:10.11.6+maria~deb11
+ARG MARIADB_VERSION=1:10.11.6+maria~deb12
 ENV MARIADB_VERSION $MARIADB_VERSION
 # release-status:Stable
 # release-support-type:Long Term Support
@@ -91,11 +91,11 @@ RUN set -e;\
 	dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
 	case $dpkgArch in \
 		"amd64"|"arm64"|"ppc64el") \
-		    REPOSITORY="http://archive.mariadb.org/mariadb-10.11.6/repo/debian/ bullseye main main/debug"; \
+		    REPOSITORY="http://archive.mariadb.org/mariadb-10.11.6/repo/debian/ bookworm main main/debug"; \
 			echo "deb ${REPOSITORY}" > /etc/apt/sources.list.d/mariadb.list; \
 			;; \
 		"s390x") \
-			REPOSITORY="https://dl.cloudsmith.io/public/jumpserver/mariadb-10-11-6/deb/debian/ bullseye main"; \
+			REPOSITORY="https://dl.cloudsmith.io/public/jumpserver/mariadb-10-11-6/deb/debian/ bookworm main"; \
 			echo "deb ${REPOSITORY}" > /etc/apt/sources.list.d/mariadb.list; \
 			;; \
 		*) \
@@ -115,8 +115,8 @@ RUN set -e;\
 # hadolint ignore=DL3015
 RUN set -ex; \
 	{ \
-		echo "mariadb-server-$MARIADB_MAJOR" mysql-server/root_password password 'unused'; \
-		echo "mariadb-server-$MARIADB_MAJOR" mysql-server/root_password_again password 'unused'; \
+		echo "mariadb-server" mysql-server/root_password password 'unused'; \
+		echo "mariadb-server" mysql-server/root_password_again password 'unused'; \
 	} | debconf-set-selections; \
 	apt-get update; \
 # postinst script creates a datadir, so avoid creating it by faking its existance.

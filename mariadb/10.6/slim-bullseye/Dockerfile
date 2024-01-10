@@ -1,9 +1,13 @@
+# vim:set ft=dockerfile:
 FROM debian:bullseye-slim
+
+# add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
+RUN groupadd -r mysql && useradd -r -g mysql mysql --home-dir /var/lib/mysql
 
 # add gosu for easy step-down from root
 # https://github.com/tianon/gosu/releases
 # gosu key is B42F6819007F00F88E364FD4036A9C25BF357DD4
-ENV GOSU_VERSION 1.14
+ENV GOSU_VERSION 1.17
 
 ARG GPG_KEYS=177F4010FE56CA3336300305F1656F24C74CD1D8
 # pub   rsa4096 2016-03-30 [SC]
@@ -43,6 +47,7 @@ RUN set -eux; \
 		gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key"; \
 	done; \
 	gpg --batch --export "$GPG_KEYS" > /etc/apt/trusted.gpg.d/mariadb.gpg; \
+	wget -qO - https://dl.cloudsmith.io/public/jumpserver/mariadb-10-6-16/gpg.B47668A04ABEE742.key | gpg --dearmor > /etc/apt/trusted.gpg.d/jumpserver-mariadb.gpg; \
 	if command -v gpgconf >/dev/null; then \
 		gpgconf --kill all; \
 	fi; \
@@ -84,10 +89,21 @@ ENV MARIADB_VERSION $MARIADB_VERSION
 # (https://downloads.mariadb.org/rest-api/mariadb/)
 
 # Allowing overriding of REPOSITORY, a URL that includes suite and component for testing and Enterprise Versions
-ARG REPOSITORY="http://archive.mariadb.org/mariadb-10.6.16/repo/debian/ bullseye main main/debug"
-
 RUN set -e;\
-	echo "deb ${REPOSITORY}" > /etc/apt/sources.list.d/mariadb.list; \
+	dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
+	case $dpkgArch in \
+		"amd64"|"arm64"|"ppc64el") \
+		    REPOSITORY="http://archive.mariadb.org/mariadb-10.6.16/repo/debian/ bullseye main main/debug"; \
+			echo "deb ${REPOSITORY}" > /etc/apt/sources.list.d/mariadb.list; \
+			;; \
+		"s390x") \
+			REPOSITORY="https://dl.cloudsmith.io/public/jumpserver/mariadb-10-6-16/deb/debian/ bullseye main"; \
+			echo "deb ${REPOSITORY}" > /etc/apt/sources.list.d/mariadb.list; \
+			;; \
+		*) \
+			echo >&2 "error: unsupported architecture: ${dpkgArch}"; \
+			;; \
+	esac; \
 	{ \
 		echo 'Package: *'; \
 		echo 'Pin: release o=MariaDB'; \
@@ -113,10 +129,10 @@ RUN set -ex; \
 	rm -rf /var/lib/apt/lists/*; \
 # purge and re-create /var/lib/mysql with appropriate ownership
 	rm -rf /var/lib/mysql /etc/mysql/mariadb.conf.d/50-mysqld_safe.cnf; \
-	mkdir -p /var/lib/mysql /var/run/mysqld; \
-	chown -R mysql:mysql /var/lib/mysql /var/run/mysqld; \
-# ensure that /var/run/mysqld (used for socket and lock files) is writable regardless of the UID our mysqld instance ends up having at runtime
-	chmod 777 /var/run/mysqld; \
+	mkdir -p /var/lib/mysql /run/mysqld; \
+	chown -R mysql:mysql /var/lib/mysql /run/mysqld; \
+# ensure that /run/mysqld (used for socket and lock files) is writable regardless of the UID our mysqld instance ends up having at runtime
+	chmod 1777 /run/mysqld; \
 # comment out a few problematic configuration values
 	find /etc/mysql/ -name '*.cnf' -print0 \
 		| xargs -0 grep -lZE '^(bind-address|log|user\s)' \
