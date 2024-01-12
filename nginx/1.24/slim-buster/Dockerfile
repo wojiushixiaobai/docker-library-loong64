@@ -11,6 +11,8 @@ ENV NGINX_VERSION   1.24.0
 ENV NJS_VERSION     0.7.12
 ENV PKG_RELEASE     1~buster
 
+COPY nginx-archive-keyring.gpg /usr/share/keyrings/jumpserver-nginx-keyring.gpg
+
 RUN set -x \
 # create nginx user/group first, to be consistent throughout docker variants
     && groupadd --system --gid 101 nginx \
@@ -48,13 +50,17 @@ RUN set -x \
             && apt-get update \
             ;; \
         loongarch64) \
-            echo "deb http://download.jumpserver.org/nginx/packages/debian buster nginx" > /etc/apt/sources.list.d/nginx.list \
+            echo "deb [signed-by=/usr/share/keyrings/jumpserver-nginx-keyring.gpg] https://dl.cloudsmith.io/public/jumpserver/nginx/deb/debian buster main" > /etc/apt/sources.list.d/nginx.list \
+            && apt-get update \
+            ;; \
+        s390x) \
+            echo "deb [signed-by=/usr/share/keyrings/jumpserver-nginx-keyring.gpg] https://dl.cloudsmith.io/public/jumpserver/nginx/deb/debian buster main" >> /etc/apt/sources.list.d/nginx.list \
             && apt-get update \
             ;; \
         *) \
 # we're on an architecture upstream doesn't officially build for
 # let's build binaries from the published source packages
-    echo "deb-src [signed-by=$NGINX_GPGKEY_PATH] https://nginx.org/packages/debian/ buster nginx" >> /etc/apt/sources.list.d/nginx.list \
+            echo "deb-src [signed-by=$NGINX_GPGKEY_PATH] https://nginx.org/packages/debian/ buster nginx" >> /etc/apt/sources.list.d/nginx.list \
             \
 # new directory for storing sources and .deb files
             && tempDir="$(mktemp -d)" \
