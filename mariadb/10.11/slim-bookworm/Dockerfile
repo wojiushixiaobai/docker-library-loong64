@@ -71,16 +71,16 @@ ENV LANG C.UTF-8
 LABEL org.opencontainers.image.authors="MariaDB Community" \
       org.opencontainers.image.title="MariaDB Database" \
       org.opencontainers.image.description="MariaDB Database for relational SQL" \
-      org.opencontainers.image.documentation="https://hub.docker.com/_/mariadb/" \
+      org.opencontainers.image.documentation="https://hub.docker.com/r/jumpserver/mariadb/" \
       org.opencontainers.image.base.name="docker.io/library/debian:bookworm-slim" \
       org.opencontainers.image.licenses="GPL-2.0" \
-      org.opencontainers.image.source="https://github.com/MariaDB/mariadb-docker" \
+      org.opencontainers.image.source="https://github.com/wojiushixiaobai/docker-library-loong64/tree/master/mariadb" \
       org.opencontainers.image.vendor="MariaDB Community" \
-      org.opencontainers.image.version="10.11.6" \
-      org.opencontainers.image.url="https://github.com/MariaDB/mariadb-docker"
+      org.opencontainers.image.version="10.11.7" \
+      org.opencontainers.image.url="https://github.com/wojiushixiaobai/docker-library-loong64/tree/master/mariadb"
 
 # bashbrew-architectures: amd64 arm64v8 ppc64le s390x
-ARG MARIADB_VERSION=1:10.11.6+maria~deb12
+ARG MARIADB_VERSION=1:10.11.7+maria~deb12
 ENV MARIADB_VERSION $MARIADB_VERSION
 # release-status:Stable
 # release-support-type:Long Term Support
@@ -91,7 +91,7 @@ RUN set -e;\
 	dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
 	case $dpkgArch in \
 		"amd64"|"arm64"|"ppc64el") \
-		    REPOSITORY="http://archive.mariadb.org/mariadb-10.11.6/repo/debian/ bookworm main main/debug"; \
+		    REPOSITORY="http://archive.mariadb.org/mariadb-10.11.7/repo/debian/ bookworm main main/debug"; \
 			echo "deb ${REPOSITORY}" > /etc/apt/sources.list.d/mariadb.list; \
 			;; \
 		"s390x") \

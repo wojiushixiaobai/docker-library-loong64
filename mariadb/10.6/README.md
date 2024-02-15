@@ -1,8 +1,5 @@
 # Quick reference
 
--	**Maintained by**:  
-	[MariaDB developer community](https://github.com/MariaDB/mariadb-docker)
-
 -	**Where to get help**:  
 	[Database Adminstrators (Stack Exchange)](https://dba.stackexchange.com/questions/tagged/docker+mariadb), [MariaDB Knowledge Base](https://mariadb.com/kb/en/docker-and-mariadb/) ([Ask a Question here](https://mariadb.com/kb/en/docker-and-mariadb/ask) available).
 
@@ -15,21 +12,10 @@ Also see the ["Getting Help with MariaDB" article on the MariaDB Knowledge Base]
 # Quick reference (cont.)
 
 -	**Where to file issues**:  
-	Issues can be filed on [https://jira.mariadb.org/](https://jira.mariadb.org/) under the "MDEV" Project and "Docker" Component, or on [GitHub](https://github.com/MariaDB/mariadb-docker/issues)
+	Issues can be filed on [GitHub](https://github.com/wojiushixiaobai/docker-library-loong64/issues)
 
 -	**Supported architectures**: ([more info](https://github.com/docker-library/official-images#architectures-other-than-amd64))  
-	[`amd64`](https://hub.docker.com/r/amd64/mariadb/), [`arm64v8`](https://hub.docker.com/r/arm64v8/mariadb/), [`ppc64le`](https://hub.docker.com/r/ppc64le/mariadb/), [`s390x`](https://hub.docker.com/r/s390x/mariadb/)
-
--	**Published image artifact details**:  
-	[repo-info repo's `repos/mariadb/` directory](https://github.com/docker-library/repo-info/blob/master/repos/mariadb) ([history](https://github.com/docker-library/repo-info/commits/master/repos/mariadb))  
-	(image metadata, transfer size, etc)
-
--	**Image updates**:  
-	[official-images repo's `library/mariadb` label](https://github.com/docker-library/official-images/issues?q=label%3Alibrary%2Fmariadb)  
-	[official-images repo's `library/mariadb` file](https://github.com/docker-library/official-images/blob/master/library/mariadb) ([history](https://github.com/docker-library/official-images/commits/master/library/mariadb))
-
--	**Source of this description**:  
-	[docs repo's `mariadb/` directory](https://github.com/docker-library/docs/tree/master/mariadb) ([history](https://github.com/docker-library/docs/commits/master/mariadb))
+	[`amd64`](https://hub.docker.com/r/amd64/mariadb/), [`arm64v8`](https://hub.docker.com/r/arm64v8/mariadb/), ~~[`ppc64le`](https://hub.docker.com/r/ppc64le/mariadb/)~~, [`s390x`](https://hub.docker.com/r/s390x/mariadb/)
 
 # What is MariaDB?
 
@@ -37,7 +23,7 @@ MariaDB Server is one of the most popular database servers in the world. It's ma
 
 The intent is also to maintain high compatibility with MySQL, ensuring a library binary equivalency and exact matching with MySQL APIs and commands. MariaDB developers continue to develop new features and improve performance to better serve its users.
 
-![logo](https://raw.githubusercontent.com/docker-library/docs/fe985dcb24154456254e252d1fa4a2b6b656ee80/mariadb/logo.png)
+![logo](https://raw.githubusercontent.com/docker-library/docs/554e4b9aaac2e266b9ab31e9a312cb6f96d69286/mariadb/logo.png)
 
 # How to use this image
 
