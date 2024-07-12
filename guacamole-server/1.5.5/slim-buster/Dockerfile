@@ -1,4 +1,4 @@
-FROM debian:buster-slim as builder
+FROM debian:buster-slim AS builder
 WORKDIR /opt
 ARG GUACD_VERSION=1.5.5
 ENV LC_ALL=C.UTF-8
@@ -25,7 +25,7 @@ ARG WITH_LIBVNCCLIENT='LibVNCServer-\d+(\.\d+)+'
 ARG WITH_LIBWEBSOCKETS='v\d+(\.\d+)+'
 
 #
-# Default build options for each core protocol support library, as well as
+# Default build options for each core protocol support library, AS well as
 # guacamole-server itself (these can be overridden at build time if different
 # options are needed)
 #

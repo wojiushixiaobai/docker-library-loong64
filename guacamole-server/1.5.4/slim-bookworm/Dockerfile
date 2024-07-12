@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim as builder
+FROM debian:bookworm-slim AS builder
 WORKDIR /opt
 ARG GUACD_VERSION=1.5.4
 ENV LC_ALL=C.UTF-8

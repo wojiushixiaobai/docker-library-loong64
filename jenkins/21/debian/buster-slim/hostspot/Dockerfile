@@ -1,4 +1,4 @@
-FROM openjdk:21-slim-buster as jre-build
+FROM openjdk:21-slim-buster AS jre-build
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends binutils git \
