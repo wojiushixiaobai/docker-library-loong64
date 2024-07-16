@@ -1,6 +1,6 @@
-FROM golang:1.21-buster AS builder-mc
+FROM golang:1.22-buster AS builder-mc
 ARG TARGETARCH
-ARG MC_VERSION=RELEASE.2023-10-30T18-43-32Z
+ARG MC_VERSION=RELEASE.2024-07-13T01-46-15Z
 
 WORKDIR /opt
 RUN set -ex \
@@ -12,9 +12,9 @@ RUN set -ex \
     && MC_RELEASE="RELEASE" make build \
     && ./mc --version
 
-FROM golang:1.21-buster AS build
+FROM golang:1.22-buster AS build
 ARG TARGETARCH
-ARG MINIO_VERSION=RELEASE.2023-11-01T18-37-25Z
+ARG MINIO_VERSION=RELEASE.2024-07-11T18-01-28Z
 
 WORKDIR /opt
 RUN set -ex \
